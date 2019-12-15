@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FM.Application.Models
+namespace FM.Application.Domain.Entities
 {
-    public class ApplicationUser : IdentityUser
+    public class User : IdentityUser
     {
     }
 }

@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using FM.Application.Data;
-using FM.Application.Models;
+using FM.Application.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FM.Application.Domain.Entities;
 
 namespace FM.Application
 {
@@ -26,15 +27,38 @@ namespace FM.Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connectionString));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserManager<UserManager<User>>()
+                .AddDefaultTokenProviders();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            })
+            .AddDeveloperSigningCredential()
+            .AddAspNetIdentity<User>()
+            .AddConfigurationStore(options =>
+            {
+                options.ConfigureDbContext = b =>
+                    b.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly("FM.Application.Data"));
+            })
+            .AddOperationalStore(options =>
+            {
+                options.ConfigureDbContext = b =>
+                    b.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly("FM.Application.Data"));
+                options.EnableTokenCleanup = true;
+            });
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

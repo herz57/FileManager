@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FM.Application.Data;
+using FM.FileService.Data.Seed;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +28,12 @@ namespace FM.FileService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<FileDbContext>(options =>
+                options.UseSqlServer(connectionString));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +52,12 @@ namespace FM.FileService
             {
                 endpoints.MapControllers();
             });
+
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<FileDbContext>().Database.Migrate();
+                DataSeed.EnsureDataSeed(scope.ServiceProvider).ConfigureAwait(false).GetAwaiter().GetResult();
+            }
         }
     }
 }
