@@ -12,6 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FM.Application.Domain.Entities;
+using IdentityServer4.EntityFramework.DbContexts;
+using FM.FileService.Data.Seed;
+using AutoMapper;
 
 namespace FM.Application
 {
@@ -50,13 +53,13 @@ namespace FM.Application
             {
                 options.ConfigureDbContext = b =>
                     b.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly("FM.Application.Data"));
+                        sql => sql.MigrationsAssembly("FM.Application"));
             })
             .AddOperationalStore(options =>
             {
                 options.ConfigureDbContext = b =>
                     b.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly("FM.Application.Data"));
+                        sql => sql.MigrationsAssembly("FM.Application"));
                 options.EnableTokenCleanup = true;
             });
 
@@ -69,6 +72,8 @@ namespace FM.Application
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,6 +103,15 @@ namespace FM.Application
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+                scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>().Database.Migrate();
+                scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                DataSeed.EnsureDataSeed(scope.ServiceProvider).ConfigureAwait(false).GetAwaiter().GetResult();
+            }
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
