@@ -6,8 +6,8 @@ namespace FM.FileService.Data
 {
     public class FileDbContext : DbContext
     {
-        public DbSet<File> Files { get; set; }
-        public DbSet<FileReadHistory> FileReadHistories { get; set; }
+        public DbSet<FileEntity> Files { get; set; }
+        public DbSet<FileReadHistoryEntity> FileReadHistories { get; set; }
         public FileDbContext(DbContextOptions<FileDbContext> options)
             : base(options)
         {

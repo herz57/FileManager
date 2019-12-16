@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FM.FileService.Data.Migrations
 {
     [DbContext(typeof(FileDbContext))]
-    [Migration("20191215203003_mg")]
+    [Migration("20191216142333_mg")]
     partial class mg
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace FM.FileService.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FM.FileService.Domain.Entities.File", b =>
+            modelBuilder.Entity("FM.FileService.Domain.Entities.FileEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,19 +40,19 @@ namespace FM.FileService.Data.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Name");
+
                     b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("FM.FileService.Domain.Entities.FileReadHistory", b =>
+            modelBuilder.Entity("FM.FileService.Domain.Entities.FileReadHistoryEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,9 +75,9 @@ namespace FM.FileService.Data.Migrations
                     b.ToTable("FileReadHistories");
                 });
 
-            modelBuilder.Entity("FM.FileService.Domain.Entities.FileReadHistory", b =>
+            modelBuilder.Entity("FM.FileService.Domain.Entities.FileReadHistoryEntity", b =>
                 {
-                    b.HasOne("FM.FileService.Domain.Entities.File", "File")
+                    b.HasOne("FM.FileService.Domain.Entities.FileEntity", "File")
                         .WithMany("FileReadHistories")
                         .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)

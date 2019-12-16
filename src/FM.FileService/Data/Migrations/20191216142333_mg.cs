@@ -14,7 +14,7 @@ namespace FM.FileService.Data.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Path = table.Column<string>(maxLength: 200, nullable: false),
+                    Path = table.Column<string>(nullable: true),
                     CreateDate = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     AllowedAnonymous = table.Column<bool>(nullable: false)
@@ -22,6 +22,7 @@ namespace FM.FileService.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Files", x => x.Id);
+                    table.UniqueConstraint("AK_Files_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(

@@ -13,30 +13,30 @@ namespace FM.FileService.DataAccess
     {
         private readonly FileDbContext _context;
         private bool disposed;
-        private Repository<File, long> _fileRepository;
-        private Repository<FileReadHistory, long> _fileReadHistoryRepository;
+        private Repository<FileEntity, long> _fileRepository;
+        private Repository<FileReadHistoryEntity, long> _fileReadHistoryRepository;
 
         public UnitOfWork(FileDbContext context)
         {
             _context = context;
         }
 
-        public Repository<File, long> FileRepository
+        public Repository<FileEntity, long> FileRepository
         {
             get
             {
                 if (_fileRepository == null)
-                    _fileRepository = new Repository<File, long>(_context);
+                    _fileRepository = new Repository<FileEntity, long>(_context);
                 return _fileRepository;
             }
         }
 
-        public Repository<FileReadHistory, long> FileReadHistoryRepository
+        public Repository<FileReadHistoryEntity, long> FileReadHistoryRepository
         {
             get
             {
                 if (_fileReadHistoryRepository == null)
-                    _fileReadHistoryRepository = new Repository<FileReadHistory, long>(_context);
+                    _fileReadHistoryRepository = new Repository<FileReadHistoryEntity, long>(_context);
                 return _fileReadHistoryRepository;
             }
         }

@@ -1,5 +1,7 @@
 ﻿using FM.FileService.Data;
 using FM.FileService.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,28 +15,28 @@ namespace FM.FileService.Data.Seed
         public static async Task EnsureDataSeed(IServiceProvider provider)
         {
             var context = provider.GetRequiredService<FileDbContext>();
-            if (await context.Database.EnsureCreatedAsync())
+            if (!context.Files.Any())
             {
-                File file = new File
+                FileEntity file = new FileEntity
                 {
                     Name = "test.jpg",
-                    Path = "../Files/",
+                    Path = "../FM.FileService/Files/test.jpg",
                     CreateDate = DateTime.Now,
                     UserId = "test-id",
-                    AllowedAnonymous = true
+                    AllowedAnonymous = false
                 };
 
-                await context.Set<File>().AddAsync(file);
+                await context.Set<FileEntity>().AddAsync(file);
                 await context.SaveChangesAsync();
 
-                FileReadHistory fileReadHistory = new FileReadHistory
+                FileReadHistoryEntity fileReadHistory = new FileReadHistoryEntity
                 {
                     FileId = 1,
                     UserId = "test-id2",
                     Date = DateTime.Now
                 };
 
-                await context.Set<FileReadHistory>().AddAsync(fileReadHistory);
+                await context.Set<FileReadHistoryEntity>().AddAsync(fileReadHistory);
                 await context.SaveChangesAsync();
             }
         }

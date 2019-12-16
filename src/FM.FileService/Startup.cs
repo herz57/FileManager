@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FM.FileService.Data;
 using FM.FileService.Data.Seed;
 using FM.FileService.DataAccess;
+using FM.FileService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,8 @@ namespace FM.FileService
                 options.UseSqlServer(connectionString));
 
             services.AddScoped<UnitOfWork>();
+
+            services.AddScoped<FileManager>();
 
         }
 

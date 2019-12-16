@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FM.FileService.Data.EntityConfigurations
 {
-    public class FileReadHistoryEntityConfiguration : IEntityTypeConfiguration<FileReadHistory>
+    public class FileReadHistoryEntityConfiguration : IEntityTypeConfiguration<FileReadHistoryEntity>
     {
-        public void Configure(EntityTypeBuilder<FileReadHistory> builder)
+        public void Configure(EntityTypeBuilder<FileReadHistoryEntity> builder)
         {
             builder.HasKey(p => p.Id);
 

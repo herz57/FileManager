@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace FM.FileService.Data.EntityConfigurations
 {
-    public class FileEntityConfiguration : IEntityTypeConfiguration<File>
+    public class FileEntityConfiguration : IEntityTypeConfiguration<FileEntity>
     {
-        public void Configure(EntityTypeBuilder<File> builder)
+        public void Configure(EntityTypeBuilder<FileEntity> builder)
         {
             builder.HasKey(p => p.Id);
+            builder.HasAlternateKey(p => p.Name);
             builder.Property(f => f.Name).HasMaxLength(50).IsRequired();
-            builder.Property(f => f.Path).HasMaxLength(200).IsRequired();
             builder.Property(f => f.AllowedAnonymous).IsRequired();
         }
     }

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace FM.FileService.Domain.Entities
 {
-    public class FileReadHistory : IEntity<long>
+    public class FileReadHistoryEntity : IEntity<long>
     {
         public long Id { get; set; }
         public long FileId { get; set; }
         public string UserId { get; set; }
-        public File File { get; set; }
+        public FileEntity File { get; set; }
         public DateTime Date { get; set; }
     }
 }
