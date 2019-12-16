@@ -1,4 +1,5 @@
-﻿using FM.FileService.Domain;
+﻿using FM.Common.DataAccess.Interfaces;
+using FM.FileService.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FM.FileService.Domain.Entities
 {
-    public class FileReadHistory
+    public class FileReadHistory : IEntity<long>
     {
         public long Id { get; set; }
         public long FileId { get; set; }

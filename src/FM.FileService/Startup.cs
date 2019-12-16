@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FM.Application.Data;
+using FM.FileService.Data;
 using FM.FileService.Data.Seed;
+using FM.FileService.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,9 @@ namespace FM.FileService
 
             services.AddDbContext<FileDbContext>(options =>
                 options.UseSqlServer(connectionString));
-            
+
+            services.AddScoped<UnitOfWork>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

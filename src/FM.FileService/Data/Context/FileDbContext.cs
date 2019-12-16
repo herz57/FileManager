@@ -2,7 +2,7 @@
 using FM.FileService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
  
-namespace FM.Application.Data
+namespace FM.FileService.Data
 {
     public class FileDbContext : DbContext
     {

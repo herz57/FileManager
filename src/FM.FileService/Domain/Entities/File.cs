@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FM.Common.DataAccess.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FM.FileService.Domain.Entities
 {
-    public class File
+    public class File : IEntity<long>
     {
         public long Id { get; set; }
         public string Name { get; set; }

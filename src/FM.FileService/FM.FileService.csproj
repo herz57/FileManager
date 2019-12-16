@@ -19,5 +19,9 @@
     <Folder Include="Files\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FM.Common\FM.Common.csproj" />
+  </ItemGroup>
+
 
 </Project>
