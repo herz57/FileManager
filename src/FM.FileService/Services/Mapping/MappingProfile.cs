@@ -21,6 +21,12 @@ namespace FM.FileService.Services.Mapping
 
             CreateMap<FileDto, FileEntity>()
                 .ForMember(d => d.UploadedTime, w => w.MapFrom(u => DatetimeConverter.ConvertToUtc(u.UploadedTime)));
+
+            CreateMap<FileReadHistoryEntity, FileReadHistoryDto>()
+                .ForMember(d => d.Date, w => w.MapFrom(u => DatetimeConverter.ConvertToUnix(u.Date)));
+
+            CreateMap<FileReadHistoryDto, FileReadHistoryEntity>()
+                .ForMember(d => d.Date, w => w.MapFrom(u => DatetimeConverter.ConvertToUtc(u.Date)));
         }
     }
 }
