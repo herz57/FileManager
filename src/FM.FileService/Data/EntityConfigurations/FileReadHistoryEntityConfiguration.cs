@@ -18,6 +18,9 @@ namespace FM.FileService.Data.EntityConfigurations
                 .HasOne(f => f.File)
                 .WithMany(f => f.FileReadHistories)
                 .HasForeignKey(f => f.FileId);
+
+            builder.Property(d => d.Date)
+                .HasDefaultValueSql("getdate()");
         }
     }
 }

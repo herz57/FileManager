@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,23 +21,11 @@ namespace FM.FileService.Data.Seed
                 FileEntity file = new FileEntity
                 {
                     Name = "test.jpg",
-                    Path = "../FM.FileService/Files/test.jpg",
-                    CreateDate = DateTime.Now,
-                    UserId = "test-id",
-                    AllowedAnonymous = false
+                    Path = string.Format("..{0}FM.FileService{0}Files{0}test.jpg", Path.DirectorySeparatorChar),
+                    UserId = "test-id"
                 };
 
                 await context.Set<FileEntity>().AddAsync(file);
-                await context.SaveChangesAsync();
-
-                FileReadHistoryEntity fileReadHistory = new FileReadHistoryEntity
-                {
-                    FileId = 1,
-                    UserId = "test-id2",
-                    Date = DateTime.Now
-                };
-
-                await context.Set<FileReadHistoryEntity>().AddAsync(fileReadHistory);
                 await context.SaveChangesAsync();
             }
         }

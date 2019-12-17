@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using FM.FileService.Data;
 using FM.FileService.Data.Seed;
 using FM.FileService.DataAccess;
@@ -40,6 +41,11 @@ namespace FM.FileService
 
             services.AddScoped<FileManager>();
 
+            services.AddAutoMapper(typeof(Startup));
+
+            services
+                .AddControllersWithViews()
+                .AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

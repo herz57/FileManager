@@ -11,13 +11,13 @@ namespace FM.FileService.Data.Migrations
                 name: "Files",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Path = table.Column<string>(nullable: true),
-                    CreateDate = table.Column<DateTime>(nullable: false),
+                    UploadedTime = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()"),
                     UserId = table.Column<string>(nullable: true),
-                    AllowedAnonymous = table.Column<bool>(nullable: false)
+                    AllowedAnonymous = table.Column<bool>(nullable: false),
+                    Size = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,11 +29,10 @@ namespace FM.FileService.Data.Migrations
                 name: "FileReadHistories",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FileId = table.Column<long>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    FileId = table.Column<Guid>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: false)
+                    Date = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {

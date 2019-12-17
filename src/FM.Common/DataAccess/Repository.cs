@@ -37,6 +37,11 @@ namespace FM.Common.DataAccess.Interfaces
             return result.State == EntityState.Deleted;
         }
 
+        public virtual void DeleteRange(TEntity[] entities)
+        {
+            _entity.RemoveRange(entities);
+        }
+
         public virtual Task<TEntity> FindAsync(TKey key)
         {
             return _entity.AsNoTracking().FirstOrDefaultAsync(e => e.Id.Equals(key));

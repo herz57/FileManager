@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FM.FileService.Data.Migrations
 {
     [DbContext(typeof(FileDbContext))]
-    [Migration("20191216142333_mg")]
+    [Migration("20191217133855_mg")]
     partial class mg
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,16 +23,12 @@ namespace FM.FileService.Data.Migrations
 
             modelBuilder.Entity("FM.FileService.Domain.Entities.FileEntity", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("AllowedAnonymous")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -41,6 +37,14 @@ namespace FM.FileService.Data.Migrations
 
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UploadedTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
@@ -54,16 +58,17 @@ namespace FM.FileService.Data.Migrations
 
             modelBuilder.Entity("FM.FileService.Domain.Entities.FileReadHistoryEntity", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
-                    b.Property<long>("FileId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
