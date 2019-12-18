@@ -15,6 +15,8 @@ using FM.Application.Domain.Entities;
 using IdentityServer4.EntityFramework.DbContexts;
 using FM.FileService.Data.Seed;
 using AutoMapper;
+using System;
+using FM.Application.Services;
 
 namespace FM.Application
 {
@@ -64,7 +66,8 @@ namespace FM.Application
             });
 
             services.AddAuthentication()
-                .AddIdentityServerJwt();
+                .AddJwtBearer();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
@@ -74,6 +77,11 @@ namespace FM.Application
             });
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddHttpClient<InnerHttpClient>("fileapi", c =>
+            {
+                c.BaseAddress = new Uri("http://localhost:5000/api/file/");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FM.Application.Data.Migrations.PersistedGrantDb
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20191216201135_mg1")]
-    partial class mg1
+    [Migration("20191218132528_mg2")]
+    partial class mg2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

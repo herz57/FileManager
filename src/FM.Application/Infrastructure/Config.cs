@@ -11,7 +11,8 @@ namespace STP.Identity.Application
         {
             return new List<IdentityResource>
             {
-                new IdentityResources.OpenId()
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
             };
         }
 
@@ -38,7 +39,7 @@ namespace STP.Identity.Application
                 {
                     ClientId = "Web",
                     ClientName = "Web",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     AllowOfflineAccess = true,
                     ClientSecrets =
                     {
@@ -47,6 +48,7 @@ namespace STP.Identity.Application
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
                         Scopes.IdentityService,
                         Scopes.FileService
                     }
@@ -66,6 +68,7 @@ namespace STP.Identity.Application
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
                         Scopes.IdentityService,
                         Scopes.FileService
                     }
@@ -87,6 +90,7 @@ namespace STP.Identity.Application
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
                         Scopes.IdentityService,
                         Scopes.FileService
                     }

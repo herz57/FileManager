@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FM.Application.Data.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    [Migration("20191216201108_mg1")]
+    [Migration("20191218132502_mg1")]
     partial class mg1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
