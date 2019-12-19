@@ -17,6 +17,8 @@ using FM.FileService.Data.Seed;
 using AutoMapper;
 using System;
 using FM.Application.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FM.Application
 {
@@ -67,13 +69,16 @@ namespace FM.Application
                 options.EnableTokenCleanup = true;
             });
 
-            services.AddAuthentication("Bearer")
-            .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(options =>
             {
-                options.Authority = "http://localhost:5000";
-                options.RequireHttpsMetadata = false;
-
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "http://localhost:5001/";
                 options.Audience = "api1";
+                options.RequireHttpsMetadata = false;
             });
 
             // In production, the Angular files will be served from this directory

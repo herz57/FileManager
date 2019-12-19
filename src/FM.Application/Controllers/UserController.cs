@@ -31,6 +31,7 @@ namespace FM.Application.Controllers
         [HttpGet]
         public string Get()
         {
+            var accessToken = Request.Headers["Authorization"];
             return "yjg";
         }
 

@@ -69,7 +69,14 @@ namespace STP.Identity.Application
             },
 
             // scopes that client has access to
-            AllowedScopes = { "api1" }
+            AllowedScopes = 
+                    { 
+                        "api1",
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        Scopes.IdentityService,
+                        Scopes.FileService
+                    }
         },
                 new Client
                 {
