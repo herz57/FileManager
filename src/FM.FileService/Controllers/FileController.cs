@@ -39,8 +39,8 @@ namespace FM.FileService.Controllers
             return Ok(mappedFiles);
         }
 
-        [HttpGet("{userId}/{fileId}")]
-        public async Task<IActionResult> GetFileStreamByIdAsync([FromRoute]string userId, [FromRoute]Guid fileId)
+        [HttpGet("{fileId}/{userId?}")]
+        public async Task<IActionResult> GetFileStreamByIdAsync([FromRoute]Guid fileId, [FromRoute]string userId = null)
         {
             FileEntity file = await _unitOfWork.FileRepository.FindAsync(fileId);
 

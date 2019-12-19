@@ -22,19 +22,7 @@ namespace FM.Application.Services
             string request = "";
             request = page > 0 && pageSize > 0 ? page + "/" + pageSize : request;
             var response = await _client.GetAsync(request);
-            var result = await HandleResponse(response);
-            return result;
-        }
 
-        public async Task<object> GetByIdAsync(string request)
-        { 
-            var response = await _client.GetAsync(request);
-            var result = await HandleResponse(response);
-            return result;
-        }
-
-        public async Task<object> HandleResponse(HttpResponseMessage response)
-        {
             if (response.IsSuccessStatusCode)
             {
                 var responseStream = await response.Content.ReadAsStreamAsync();
@@ -45,6 +33,12 @@ namespace FM.Application.Services
             {
                 return new object[] { response.StatusCode, response.ReasonPhrase };
             }
+        }
+
+        public async Task<HttpResponseMessage> GetByIdAsync(string request)
+        { 
+            var response = await _client.GetAsync(request);
+            return response;
         }
     }
 }

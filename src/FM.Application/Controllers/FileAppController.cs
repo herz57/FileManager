@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -33,7 +34,6 @@ namespace FM.Application.Controllers
             return result;
         }
 
-        [Authorize]
         [HttpGet("{fileId}")]
         public async Task<object> GetFileStreamByIdAsync([FromRoute]string fileId)
         {
@@ -42,7 +42,7 @@ namespace FM.Application.Controllers
 
             if (user != null)
             {
-                parameters = user.Id + "/" + fileId;
+                parameters = Path.Combine(new string[] { fileId, user.Id });
             }
 
             var result = await _client.GetByIdAsync(parameters);
