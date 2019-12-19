@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using FM.Application.Data;
-using FM.Application.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,18 +17,25 @@ using AutoMapper;
 using System;
 using FM.Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using FM.Common.Options;
 
 namespace FM.Application
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        protected OAuthOptions _oauthOptions { get; set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }
 
-        public IConfiguration Configuration { get; }
+            var baseUrl = Configuration[WebHostDefaults.ServerUrlsKey];
+            Configuration.GetSection("OAuthOptions").GetSection("AuthServer").Value = baseUrl;
+
+            _oauthOptions = new OAuthOptions();
+            Configuration.GetSection(nameof(OAuthOptions)).Bind(_oauthOptions);
+        }        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -76,9 +82,10 @@ namespace FM.Application
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = "http://localhost:5001/";
-                options.Audience = "api1";
+                options.Authority = _oauthOptions.AuthServer;
+                options.Audience = _oauthOptions.ApiName;
                 options.RequireHttpsMetadata = false;
+
             });
 
             // In production, the Angular files will be served from this directory
@@ -91,8 +98,9 @@ namespace FM.Application
 
             services.AddHttpClient<InnerHttpClient>("fileapi", c =>
             {
-                c.BaseAddress = new Uri("http://localhost:5000/api/file/");
+                c.BaseAddress = new Uri(Configuration.GetSection("ExternalApiUrls").GetSection("FileService").GetSection("FileApi").Value);
             });
+           var reg = new Uri(Configuration.GetSection("ExternalApiUrls").GetSection("FileService").GetSection("FileApi").Value);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

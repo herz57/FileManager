@@ -20,16 +20,15 @@ namespace STP.Identity.Application
         {
             return new List<ApiResource>
             {
-                new ApiResource("IdentityService","IdentityService API"),
-                new ApiResource("FileService", "FileService API"),
-                new ApiResource("api1", "My API")
+                new ApiResource("identity","IdentityService API"),
+                new ApiResource("file", "FileService API")
             };
         }
 
         public static class Scopes
         {
-            public const string IdentityService = "IdentityService";
-            public const string FileService = "FileService";
+            public const string IdentityService = "identity";
+            public const string FileService = "file";
         }
 
         public static IEnumerable<Client> GetClients()
@@ -46,71 +45,6 @@ namespace STP.Identity.Application
                     {
                         new Secret("secret".Sha256())
                     },
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        Scopes.IdentityService,
-                        Scopes.FileService
-                    }
-                },
-
-                new Client
-        {
-            ClientId = "client",
-
-            // no interactive user, use the clientid/secret for authentication
-            AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-            // secret for authentication
-            ClientSecrets =
-            {
-                new Secret("secret".Sha256())
-            },
-
-            // scopes that client has access to
-            AllowedScopes = 
-                    { 
-                        "api1",
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        Scopes.IdentityService,
-                        Scopes.FileService
-                    }
-        },
-                new Client
-                {
-                    ClientId = "Swagger",
-                    ClientName = "Swagger",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                    AllowOfflineAccess = true,
-
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        Scopes.IdentityService,
-                        Scopes.FileService
-                    }
-                },
-
-                new Client
-                {
-                    ClientId = "innerHttp",
-                    ClientName = "innerHttp",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    RequireClientSecret = false,
-                    AllowOfflineAccess = true,
-
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
