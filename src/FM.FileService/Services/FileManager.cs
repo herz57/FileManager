@@ -18,14 +18,14 @@ namespace FM.FileService.Services
             _appEnvironment = appEnvironment;
         }
 
-        public async Task<bool> AddFileAsync(IFormFile uploadedFile)
+        public async Task<bool> AddFileAsync(IFormFile uploadFile)
         {
-            if (uploadedFile != null)
+            if (uploadFile != null)
             {
-                string path = "../FM.FileService/Files/" + uploadedFile.FileName;
+                string path = string.Format("..{0}FM.FileService{0}Files{0}{1}", Path.DirectorySeparatorChar, uploadFile.FileName);
                 using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
-                    await uploadedFile.CopyToAsync(fileStream);
+                    await uploadFile.CopyToAsync(fileStream);
                 }
                 return true;
             }
