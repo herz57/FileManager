@@ -18,6 +18,7 @@ using System;
 using FM.Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FM.Common.Options;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FM.Application
 {
@@ -42,7 +43,14 @@ namespace FM.Application
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddMvc(optionx => optionx.EnableEndpointRouting = false);
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+            });
+            services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
@@ -100,7 +108,6 @@ namespace FM.Application
             {
                 c.BaseAddress = new Uri(Configuration.GetSection("ExternalApiUrls").GetSection("FileService").GetSection("FileApi").Value);
             });
-           var reg = new Uri(Configuration.GetSection("ExternalApiUrls").GetSection("FileService").GetSection("FileApi").Value);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -128,6 +135,7 @@ namespace FM.Application
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+            app.UseCors("CorsPolicy");
             app.UseMvc();
 
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())

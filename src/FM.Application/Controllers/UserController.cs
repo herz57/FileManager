@@ -27,7 +27,7 @@ namespace FM.Application.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public string Get()
         {

@@ -49,9 +49,13 @@ namespace STP.Identity.Application
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
                         Scopes.IdentityService,
                         Scopes.FileService
-                    }
+                    },
+                    AllowedCorsOrigins =     { "http://localhost:4200" },
+                    AccessTokenLifetime = 10,
+                    IdentityTokenLifetime = 10
                 }
             };
         }

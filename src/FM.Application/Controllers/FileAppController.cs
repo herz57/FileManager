@@ -27,6 +27,7 @@ namespace FM.Application.Controllers
             _userManager = userManager;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<object> GetFilesAsync(int page = 0, int pageSize = 0)
         {
