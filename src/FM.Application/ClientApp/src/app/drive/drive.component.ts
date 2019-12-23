@@ -20,5 +20,4 @@ export class DriveComponent implements OnInit {
     this.http.get<any>(this.filesUrl)
     .subscribe((data) => this.response = JSON.stringify(data));
   }
-
 }
