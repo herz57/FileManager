@@ -12,6 +12,11 @@ using FM.FileService.Domain.Entities;
 using FM.FileService.Domain.DTOs;
 using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
+using FM.FileService.Data.Specification.FileSpecification;
+using FM.FileService.Filters;
+using FM.Common.Enums;
+using System.Linq.Expressions;
+using FM.FileService.Data;
 
 namespace FM.FileService.Controllers
 {
@@ -31,12 +36,11 @@ namespace FM.FileService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<FileDto[]>> GetFilesAsync(int page = 1, int pageSize = 10)
+        public async Task<ActionResult<FileDto[]>> GetFilesAsync([FromBody]FileFilterDto fileFilterDto)
         {
-            var files = await _unitOfWork.FileRepository.GetAllAsync();
-            var pageFiles = files.Skip((page - 1) * pageSize).Take(pageSize).ToArray();
-            var mappedFiles = _mapper.Map<FileDto[]>(pageFiles);
-            return Ok(mappedFiles);
+            var result = await _fileManager.GetFilesAsync(fileFilterDto);
+            var mappedFiles = _mapper.Map<FileDto[]>(result);
+            return mappedFiles;
         }
 
         [HttpGet("{fileId}/{userId?}")]

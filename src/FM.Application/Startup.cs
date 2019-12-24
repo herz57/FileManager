@@ -43,13 +43,7 @@ namespace FM.Application
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod());
-            });
+            
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -108,11 +102,22 @@ namespace FM.Application
             {
                 c.BaseAddress = new Uri(Configuration.GetSection("ExternalApiUrls").GetSection("FileService").GetSection("FileApi").Value);
             });
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("AllowOrigin");
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -130,12 +135,11 @@ namespace FM.Application
             {
                 app.UseSpaStaticFiles();
             }
-
-
+            
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseCors("CorsPolicy");
+            
             app.UseMvc();
 
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -145,6 +149,7 @@ namespace FM.Application
                 scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
                 DataSeed.EnsureDataSeed(scope.ServiceProvider).ConfigureAwait(false).GetAwaiter().GetResult();
             }
+
         }
     }
 }
