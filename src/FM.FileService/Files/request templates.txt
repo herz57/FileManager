@@ -1,6 +1,0 @@
-{
-	"Name": "postman",
-	"Path": "jhwjhwefjh",
-	"UserId":"1",
-	"AllowedAnonymous": true
-}

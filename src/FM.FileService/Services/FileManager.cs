@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using FM.Common.Enums;
 using FM.FileService.Data.Specification.FileSpecification;
 using FM.Common.Extensions;
+using FM.FileService.Domain.DTOs;
 
 namespace FM.FileService.Services
 {
@@ -28,18 +29,36 @@ namespace FM.FileService.Services
             _context = context;
         }
 
-        public async Task<bool> AddFileAsync(IFormFile uploadFile)
+        public async Task<FileUploadResult> AddFileAsync(IFormFile uploadFile, string path)
         {
             if (uploadFile != null)
             {
-                string path = string.Format("..{0}FM.FileService{0}Files{0}{1}", Path.DirectorySeparatorChar, uploadFile.FileName);
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                path = string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, uploadFile.FileName);
+
+                if (File.Exists(path))
+                {
+                    return new FileUploadResult { 
+                        IsSuccess = false,
+                        Message = $"File {uploadFile.FileName} has already exists"
+                    };
+                }
+               
                 using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
                     await uploadFile.CopyToAsync(fileStream);
                 }
-                return true;
+                return new FileUploadResult { IsSuccess = true };
             }
-            return false;
+            return new FileUploadResult
+            {
+                IsSuccess = false,
+                Message = $"File {uploadFile.FileName} failed to upload"
+            };
         }
 
         public async Task<IReadOnlyList<FileEntity>> GetFilesAsync(FileFilterDto fileFilterDto)

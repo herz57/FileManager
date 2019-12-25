@@ -65,17 +65,18 @@ namespace FM.FileService.Controllers
         [HttpPost("{userId}")]
         public async Task<ActionResult<FileDto>> AddFileAsync([FromForm(Name = "file")]IFormFile uploadFile, [FromRoute]string userId)
         {
-            var isUpload = await _fileManager.AddFileAsync(uploadFile);
+            string path = string.Format("..{0}FM.FileService{0}Files{0}{1}", Path.DirectorySeparatorChar, userId);
+            var uploadFileResult = await _fileManager.AddFileAsync(uploadFile, path);
 
-            if (!isUpload)
+            if (!uploadFileResult.IsSuccess)
             {
-                return BadRequest();
+                return BadRequest(uploadFileResult.Message);
             }
 
             FileEntity file = new FileEntity
             {
                 Name = uploadFile.FileName,
-                Path = string.Format("..{0}FM.FileService{0}Files{0}{1}", Path.DirectorySeparatorChar, uploadFile.FileName),
+                Path = string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, uploadFile.FileName),
                 UserId = userId,
                 Size = uploadFile.Length / 1024
             };
@@ -139,10 +140,16 @@ namespace FM.FileService.Controllers
                 return StatusCode(403);
             }
 
+            if (System.IO.File.Exists(file.Path))
+            {
+                System.IO.File.Delete(file.Path);
+            }
+
             _unitOfWork.FileRepository.Delete(file.Id);
             var files = await _unitOfWork.FileReadHistoryRepository.GetAsync(p => p.FileId == fileId);
             _unitOfWork.FileReadHistoryRepository.DeleteRange(files);
             await _unitOfWork.SaveChangesAsync();
+
             return Ok();
         }
     }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace FM.FileService.Domain.DTOs
 {
-    public class UpdateFileDto
+    public class FileUploadResult
     {
-        public Guid Id { get; set; }
-        public bool AllowedAnonymous { get; set; }
+        public bool IsSuccess { get; set; }
+        public string Message { get; set; }
     }
 }
