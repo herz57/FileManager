@@ -29,35 +29,39 @@ namespace FM.FileService.Services
             _context = context;
         }
 
-        public async Task<FileUploadResult> AddFileAsync(IFormFile uploadFile, string path)
+        public async Task<FileUploadResult> AddFileAsync(List<IFormFile> uploadFiles, string directoryPath)
         {
-            if (uploadFile != null)
+            long size = uploadFiles.Sum(f => f.Length) / 1024;
+            string filePath;
+
+            if (!Directory.Exists(directoryPath))
             {
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
+                Directory.CreateDirectory(directoryPath);
+            }
 
-                path = string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, uploadFile.FileName);
+            foreach (var fileToUpload in uploadFiles)
+            {
+                filePath = string.Format("{0}{1}{2}", directoryPath, Path.DirectorySeparatorChar, fileToUpload.FileName);
 
-                if (File.Exists(path))
+                if (File.Exists(filePath))
                 {
-                    return new FileUploadResult { 
+                    return new FileUploadResult
+                    {
                         IsSuccess = false,
-                        Message = $"File {uploadFile.FileName} has already exists"
+                        Message = $"File {fileToUpload.FileName} has already exists."
                     };
                 }
-               
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + filePath, FileMode.Create))
                 {
-                    await uploadFile.CopyToAsync(fileStream);
+                    await fileToUpload.CopyToAsync(fileStream);
                 }
-                return new FileUploadResult { IsSuccess = true };
             }
             return new FileUploadResult
             {
-                IsSuccess = false,
-                Message = $"File {uploadFile.FileName} failed to upload"
+                IsSuccess = true,
+                Count = uploadFiles.Count,
+                Size = size
             };
         }
 

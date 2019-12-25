@@ -10,5 +10,7 @@ namespace FM.FileService.Domain.DTOs
     {
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
+        public int Count { get; set; }
+        public long Size { get; set; }
     }
 }

@@ -63,28 +63,32 @@ namespace FM.FileService.Controllers
         }
 
         [HttpPost("{userId}")]
-        public async Task<ActionResult<FileDto>> AddFileAsync([FromForm(Name = "file")]IFormFile uploadFile, [FromRoute]string userId)
+        public async Task<ActionResult<FileDto>> AddFileAsync([FromForm(Name = "file")]List<IFormFile> uploadFiles, [FromRoute]string userId)
         {
             string path = string.Format("..{0}FM.FileService{0}Files{0}{1}", Path.DirectorySeparatorChar, userId);
-            var uploadFileResult = await _fileManager.AddFileAsync(uploadFile, path);
+            var uploadFilesResult = await _fileManager.AddFileAsync(uploadFiles, path);
 
-            if (!uploadFileResult.IsSuccess)
+            if (!uploadFilesResult.IsSuccess)
             {
-                return BadRequest(uploadFileResult.Message);
+                return BadRequest(uploadFilesResult.Message);
             }
 
-            FileEntity file = new FileEntity
+            foreach (var fileToRecord in uploadFiles)
             {
-                Name = uploadFile.FileName,
-                Path = string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, uploadFile.FileName),
-                UserId = userId,
-                Size = uploadFile.Length / 1024
-            };
+                FileEntity file = new FileEntity
+                {
+                    Name = fileToRecord.FileName,
+                    Path = string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, fileToRecord.FileName),
+                    UserId = userId,
+                    Size = fileToRecord.Length / 1024
+                };
+
+                var fileResult = await _unitOfWork.FileRepository.CreateAsync(file);
+            }
             
-            var fileResult = await _unitOfWork.FileRepository.CreateAsync(file);
             await _unitOfWork.SaveChangesAsync();
-            var mapperFile = _mapper.Map<FileDto>(fileResult);
-            return mapperFile;
+
+            return Ok(uploadFilesResult);
         }
 
         [HttpPatch("{userId}/{fileId}")]

@@ -6,7 +6,7 @@ namespace FM.Common.Enums
 {
     public enum FileSortingMode
     {
-        OrderBy,
+        OrderBy = 1,
         OrderByDescending
     }
 }
