@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FM.Common.Enums
 {
-    public enum FileOrderingMode
+    public enum FileSortingMode
     {
         OrderBy,
         OrderByDescending

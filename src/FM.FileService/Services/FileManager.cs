@@ -1,6 +1,5 @@
 ﻿using FM.FileService.Data;
 using FM.FileService.Data.Specification.Interfaces;
-using FM.FileService.DataAccess;
 using FM.FileService.Domain.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +13,7 @@ using FM.FileService.Filters;
 using System.Linq.Expressions;
 using FM.Common.Enums;
 using FM.FileService.Data.Specification.FileSpecification;
+using FM.Common.Extensions;
 
 namespace FM.FileService.Services
 {
@@ -44,39 +44,64 @@ namespace FM.FileService.Services
 
         public async Task<IReadOnlyList<FileEntity>> GetFilesAsync(FileFilterDto fileFilterDto)
         {
-            FileFilterSpecification fileFilterSpecification;
-            Expression<Func<FileEntity, object>> exp = null;
+            Expression<Func<FileEntity, object>> sortingColumnExp = null;
+            Expression<Func<FileEntity, bool>> criterias = f => true;
 
-            fileFilterSpecification =
-                new FileFilterSpecification(null, fileFilterDto.ItemsPage * fileFilterDto.PageIndex, fileFilterDto.ItemsPage);
-            
+            if (fileFilterDto.Filters != null)
+            {
+                if (fileFilterDto.Filters.Id != null)
+                {
+                    criterias = criterias.AndAlso(f => f.Id.ToString().Contains(fileFilterDto.Filters.Id));
+                }
+                if (fileFilterDto.Filters.Name != null)
+                {
+                    criterias = criterias.AndAlso(f => f.Name.Contains(fileFilterDto.Filters.Name));
+                }
+                if (fileFilterDto.Filters.Size != null)
+                {
+                    criterias = criterias.AndAlso(f => f.Size >= fileFilterDto.Filters.Size[0] && f.Size <= fileFilterDto.Filters.Size[1]);
+                }
+                if (fileFilterDto.Filters.UploadTime != null)
+                {
+                    criterias = criterias.AndAlso(f => f.UploadedTime >= fileFilterDto.Filters.UploadTime[0].ConvertToUtc()
+                            && f.UploadedTime <= (fileFilterDto.Filters.UploadTime[1] + 1).ConvertToUtc());
+                }
+                if (fileFilterDto.Filters.AllowedAnonymous != null)
+                {
+                    criterias = criterias.AndAlso(f => f.AllowedAnonymous == fileFilterDto.Filters.AllowedAnonymous);
+                }
+            }
 
-            switch (fileFilterDto.OrderingColumn)
+            FileFilterSpecification fileFilterSpecification = new FileFilterSpecification(criterias, 
+                fileFilterDto.ItemsPage * fileFilterDto.PageIndex, 
+                fileFilterDto.ItemsPage);
+
+            switch (fileFilterDto.SortingColumn)
             {
                 case "Id":
-                    exp = f => f.Id;
+                    sortingColumnExp = f => f.Id;
                     break;
                 case "Name":
-                    exp = f => f.Name;
+                    sortingColumnExp = f => f.Name;
                     break;
                 case "UploadedTime":
-                    exp = f => f.UploadedTime;
+                    sortingColumnExp = f => f.UploadedTime;
                     break;
                 case "Size":
-                    exp = f => f.Size;
+                    sortingColumnExp = f => f.Size;
                     break;
                 case "AllowedAnonymous":
-                    exp = f => f.AllowedAnonymous;
+                    sortingColumnExp = f => f.AllowedAnonymous;
                     break;
             }
 
-            if (fileFilterDto.OrderingMode == FileOrderingMode.OrderBy)
+            if (fileFilterDto.SortingMode == FileSortingMode.OrderBy)
             {
-                fileFilterSpecification.ApplyOrderBy(exp);
+                fileFilterSpecification.ApplyOrderBy(sortingColumnExp);
             }
-            else if (fileFilterDto.OrderingMode == FileOrderingMode.OrderByDescending)
+            else if (fileFilterDto.SortingMode == FileSortingMode.OrderByDescending)
             {
-                fileFilterSpecification.ApplyOrderByDescending(exp);
+                fileFilterSpecification.ApplyOrderByDescending(sortingColumnExp);
             }
 
             var result = await ApplySpecification(fileFilterSpecification).ToArrayAsync();

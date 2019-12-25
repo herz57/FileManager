@@ -9,10 +9,9 @@ namespace FM.FileService.Filters
     public class FileFilterDto
     {
         public FileFilters Filters { get; set; }
-        public FileFilterMode FilterMode { get; set; }
-        public FileOrderingMode OrderingMode { get; set; }
-        public string OrderingColumn { get; set; }
-        public int PageIndex { get; set; }
-        public int ItemsPage { get; set; }
+        public FileSortingMode SortingMode { get; set; }
+        public string SortingColumn { get; set; }
+        public int PageIndex { get; set; } = 0;
+        public int ItemsPage { get; set; } = 10;
     }
 }
