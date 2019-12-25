@@ -59,7 +59,8 @@ namespace FM.FileService.Services
                 }
                 if (fileFilterDto.Filters.Size != null)
                 {
-                    criterias = criterias.AndAlso(f => f.Size >= fileFilterDto.Filters.Size[0] && f.Size <= fileFilterDto.Filters.Size[1]);
+                    criterias = criterias.AndAlso(f => f.Size >= fileFilterDto.Filters.Size[0] 
+                        && f.Size <= fileFilterDto.Filters.Size[1]);
                 }
                 if (fileFilterDto.Filters.UploadTime != null)
                 {
@@ -76,23 +77,26 @@ namespace FM.FileService.Services
                 fileFilterDto.ItemsPage * fileFilterDto.PageIndex, 
                 fileFilterDto.ItemsPage);
 
-            switch (fileFilterDto.SortingColumn)
+            if (fileFilterDto.SortingColumn != null)
             {
-                case "Id":
-                    sortingColumnExp = f => f.Id;
-                    break;
-                case "Name":
-                    sortingColumnExp = f => f.Name;
-                    break;
-                case "UploadedTime":
-                    sortingColumnExp = f => f.UploadedTime;
-                    break;
-                case "Size":
-                    sortingColumnExp = f => f.Size;
-                    break;
-                case "AllowedAnonymous":
-                    sortingColumnExp = f => f.AllowedAnonymous;
-                    break;
+                switch (fileFilterDto.SortingColumn)
+                {
+                    case "Id":
+                        sortingColumnExp = f => f.Id;
+                        break;
+                    case "Name":
+                        sortingColumnExp = f => f.Name;
+                        break;
+                    case "UploadedTime":
+                        sortingColumnExp = f => f.UploadedTime;
+                        break;
+                    case "Size":
+                        sortingColumnExp = f => f.Size;
+                        break;
+                    case "AllowedAnonymous":
+                        sortingColumnExp = f => f.AllowedAnonymous;
+                        break;
+                }
             }
 
             if (fileFilterDto.SortingMode == FileSortingMode.OrderBy)
