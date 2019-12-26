@@ -36,7 +36,7 @@ namespace FM.Application.Controllers
         }
 
         [HttpGet("{fileId}")]
-        public async Task<object> GetFileStreamByIdAsync([FromRoute]string fileId)
+        public async Task<IActionResult> GetFileStreamByIdAsync([FromRoute]string fileId)
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             string parameters = fileId;
@@ -47,7 +47,9 @@ namespace FM.Application.Controllers
             }
 
             var result = await _client.GetByIdAsync(parameters);
-            return result;
+            var stream = await result.Content.ReadAsStreamAsync();
+            string fileName = result.Headers.GetValues("filename").FirstOrDefault();
+            return File(stream, $"application/{Path.GetExtension(fileName)}", fileName);
         }
 
         //[HttpPost("{userId}")]

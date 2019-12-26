@@ -63,7 +63,8 @@ namespace FM.FileService.Controllers
             FileStream fs = new FileStream(file.Path, FileMode.Open);
             await _unitOfWork.FileReadHistoryRepository.CreateAsync(fileReadHistoryEntity);
             await _unitOfWork.SaveChangesAsync();
-            return File(fs, $"application/{file.Extension}", file.Name);
+            Response.Headers.Add("filename", file.Name);
+            return File(fs, $"application/{file.Extension}");
         }
 
         [HttpPost("{userId}")]

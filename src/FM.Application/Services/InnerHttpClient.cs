@@ -7,6 +7,7 @@ using System.Web;
 using System.Text.Json;
 using System.Text;
 using FM.Common.Filters;
+using System.Net.Http.Headers;
 
 namespace FM.Application.Services
 {
@@ -38,7 +39,7 @@ namespace FM.Application.Services
         }
 
         public async Task<HttpResponseMessage> GetByIdAsync(string request)
-        { 
+        {
             var httpResponse = await _client.GetAsync(request);
             return httpResponse;
         }
