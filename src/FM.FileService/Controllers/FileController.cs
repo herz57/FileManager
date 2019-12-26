@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
 using FM.Common.Domain.DTOs;
 using FM.Common.Filters;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FM.FileService.Controllers
 {
@@ -31,7 +33,8 @@ namespace FM.FileService.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
+        [Authorize]
+        [HttpGet]
         public async Task<ActionResult<FileDto[]>> GetFilesAsync([FromBody]FileFilterDto fileFilterDto)
         {
             var result = await _fileManager.GetFilesAsync(fileFilterDto);
@@ -39,9 +42,11 @@ namespace FM.FileService.Controllers
             return mappedFiles;
         }
 
-        [HttpGet("{fileId}/{userId?}")]
-        public async Task<IActionResult> GetFileStreamByIdAsync([FromRoute]Guid fileId, [FromRoute]string userId = null)
+        [HttpGet("{fileId}")]
+        public async Task<IActionResult> GetFileStreamByIdAsync([FromRoute]Guid fileId)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             FileEntity file = await _unitOfWork.FileRepository.FindAsync(fileId);
 
             if (file == null)
@@ -63,13 +68,14 @@ namespace FM.FileService.Controllers
             FileStream fs = new FileStream(file.Path, FileMode.Open);
             await _unitOfWork.FileReadHistoryRepository.CreateAsync(fileReadHistoryEntity);
             await _unitOfWork.SaveChangesAsync();
-            Response.Headers.Add("filename", file.Name);
-            return File(fs, $"application/{file.Extension}");
+            return File(fs, $"application/{file.Extension}", file.Name);
         }
 
-        [HttpPost("{userId}")]
-        public async Task<ActionResult<FileDto>> AddFileAsync([FromForm(Name = "file")]List<IFormFile> uploadFiles, [FromRoute]string userId)
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> AddFileAsync([FromForm(Name = "file")]List<IFormFile> uploadFiles)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             string path = string.Format("..{0}FM.FileService{0}Files{0}{1}", Path.DirectorySeparatorChar, userId);
             var uploadFilesResult = await _fileManager.AddFileAsync(uploadFiles, path);
 
@@ -96,12 +102,13 @@ namespace FM.FileService.Controllers
             return Ok(uploadFilesResult);
         }
 
-        [HttpPatch("{userId}/{fileId}")]
-        public async Task<IActionResult> PatchFile([FromBody]JsonPatchDocument<UpdateFileDto> filePatch, 
-            [FromRoute]string userId,
+        [Authorize]
+        [HttpPatch("{fileId}")]
+        public async Task<IActionResult> PatchFile([FromBody]JsonPatchDocument<UpdateFileDto> filePatch,
             [FromRoute]Guid fileId)
         {
             var file = await _unitOfWork.FileRepository.FindAsync(fileId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (file == null)
             {
@@ -134,10 +141,12 @@ namespace FM.FileService.Controllers
             return Ok(mappedFile);
         }
 
-        [HttpDelete("{userId}/{fileId}")]
-        public async Task<IActionResult> DeleteFile([FromRoute]string userId, [FromRoute]Guid fileId)
+        [Authorize]
+        [HttpDelete("{fileId}")]
+        public async Task<IActionResult> DeleteFile([FromRoute]Guid fileId)
         {
             var file = await _unitOfWork.FileRepository.FindAsync(fileId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (file == null)
             {

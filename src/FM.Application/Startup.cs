@@ -105,11 +105,6 @@ namespace FM.Application
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddHttpClient<InnerHttpClient>("fileapi", c =>
-            {
-                c.BaseAddress = new Uri(Configuration.GetSection("ExternalApiUrls").GetSection("FileService").GetSection("FileApi").Value);
-            });
-
             services.AddCors(c =>
             {
                 c.AddPolicy("AllowOrigin", options => options
@@ -156,7 +151,6 @@ namespace FM.Application
                 scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
                 DataSeed.EnsureDataSeed(scope.ServiceProvider).ConfigureAwait(false).GetAwaiter().GetResult();
             }
-
         }
     }
 }

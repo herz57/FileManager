@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FM.Common.Domain.DTOs;
 using FM.FileService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace FM.FileService.Controllers
             _fileManager = fileManager;
         }
 
+        [Authorize]
         [HttpGet("{fileId}/{pageIndex?}/{itemsPage?}")]
         public async Task<ActionResult<FileReadHistoryDto[]>> GetFileReadHistoryAsync([FromRoute]Guid fileId, 
             [FromRoute]int pageIndex = 0,

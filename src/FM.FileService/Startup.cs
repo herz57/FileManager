@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using FM.Common.Options;
 using FM.FileService.Data;
 using FM.FileService.Data.Seed;
 using FM.FileService.DataAccess;
 using FM.FileService.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +27,13 @@ namespace FM.FileService
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            _oauthOptions = new OAuthOptions();
+            Configuration.GetSection(nameof(OAuthOptions)).Bind(_oauthOptions);
         }
 
         public IConfiguration Configuration { get; }
+        protected OAuthOptions _oauthOptions { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -48,11 +54,33 @@ namespace FM.FileService
             services
                 .AddControllersWithViews()
                 .AddNewtonsoftJson();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Authority = _oauthOptions.AuthServer;
+                options.Audience = _oauthOptions.ApiName;
+                options.RequireHttpsMetadata = false;
+            });
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("AllowOrigin");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -60,6 +88,7 @@ namespace FM.FileService
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
