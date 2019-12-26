@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FM.FileService.Domain.DTOs
+namespace FM.Common.Domain.DTOs
 {
     public class FileReadHistoryDto
     {
@@ -11,5 +11,6 @@ namespace FM.FileService.Domain.DTOs
         public Guid FileId { get; set; }
         public string UserId { get; set; }
         public long Date { get; set; }
+        public int MyProperty { get; set; }
     }
 }

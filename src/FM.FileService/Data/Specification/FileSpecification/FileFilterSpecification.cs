@@ -1,4 +1,5 @@
-﻿using FM.Common.Enums;
+﻿using FM.Common.DataAccess.Interfaces;
+using FM.Common.Enums;
 using FM.FileService.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FM.FileService.Data.Specification.FileSpecification
 {
-    public class FileFilterSpecification : BaseSpecification<FileEntity>
+    public class FileFilterSpecification<T> : BaseSpecification<T> where T : IEntity<Guid>
     {
-        public FileFilterSpecification(Expression<Func<FileEntity, bool>> expression,
+        public FileFilterSpecification(Expression<Func<T, bool>> expression,
             int skip, 
             int take)
             : base(expression)

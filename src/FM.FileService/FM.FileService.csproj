@@ -8,6 +8,8 @@
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="EntityFramework" Version="6.4.0" />
+    <PackageReference Include="FluentValidation" Version="8.6.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.0" />
     <PackageReference Include="LinqKit" Version="1.1.17" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
@@ -23,6 +25,7 @@
   <ItemGroup>
     <Folder Include="Files\" />
     <Folder Include="Files\5a8201fd-6d6b-4d2c-81d0-56d5858b6037\" />
+    <Folder Include="Infrastructure\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FM.Application.Domain.Entities;
 using FM.Application.Services;
+using FM.Common.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -27,10 +28,10 @@ namespace FM.Application.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet]
-        public async Task<object> GetFilesAsync(int page = 0, int pageSize = 0)
+        [HttpPost]
+        public async Task<object> GetFilesAsync([FromBody]FileFilterDto fileFilterDto)
         {
-            var result = await _client.GetAsync(page, pageSize);
+            var result = await _client.GetAsync(fileFilterDto);
             return result;
         }
 

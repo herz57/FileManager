@@ -9,12 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FM.FileService.Filters;
 using System.Linq.Expressions;
 using FM.Common.Enums;
 using FM.FileService.Data.Specification.FileSpecification;
 using FM.Common.Extensions;
-using FM.FileService.Domain.DTOs;
+using FM.Common.DataAccess.Interfaces;
+using FM.Common.Filters;
+using FM.Common.Domain.DTOs;
 
 namespace FM.FileService.Services
 {
@@ -96,9 +97,9 @@ namespace FM.FileService.Services
                 }
             }
 
-            FileFilterSpecification fileFilterSpecification = new FileFilterSpecification(criterias, 
-                fileFilterDto.ItemsPage * fileFilterDto.PageIndex, 
-                fileFilterDto.ItemsPage);
+            FileFilterSpecification<FileEntity> fileFilterSpecification = new FileFilterSpecification<FileEntity>(criterias, 
+            fileFilterDto.ItemsPage * fileFilterDto.PageIndex, 
+            fileFilterDto.ItemsPage);
 
             if (fileFilterDto.SortingColumn != null)
             {
@@ -135,9 +136,22 @@ namespace FM.FileService.Services
             return result;
         }
 
-        private IQueryable<FileEntity> ApplySpecification(ISpecification<FileEntity> spec)
+        public async Task<IReadOnlyList<FileReadHistoryEntity>> GetFileHistoriesAsync(Guid fileId, 
+            int pageIndex,
+            int itemsPage)
         {
-            return SpecificationEvaluator<FileEntity>.GetQuery(_context.Set<FileEntity>().AsQueryable(), spec);
+            FileFilterSpecification<FileReadHistoryEntity> fileHistoryFilterSpecification = 
+                    new FileFilterSpecification<FileReadHistoryEntity>(f => f.FileId == fileId,
+                    itemsPage * pageIndex,
+                    itemsPage);
+
+            var result = await ApplySpecification(fileHistoryFilterSpecification).ToArrayAsync();
+            return result;
+        }
+
+        private IQueryable<T> ApplySpecification<T>(ISpecification<T> spec) where T : class, IEntity<Guid>
+        {
+            return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
     }
 }

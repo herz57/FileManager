@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Web;
 using System.Text.Json;
+using System.Text;
+using FM.Common.Filters;
 
 namespace FM.Application.Services
 {
@@ -17,28 +19,28 @@ namespace FM.Application.Services
             _client = client;
         }
 
-        public async Task<object> GetAsync(int page = 0, int pageSize = 0)
+        public async Task<object> GetAsync(FileFilterDto fileFilterDto)
         {
-            string request = "";
-            request = page > 0 && pageSize > 0 ? page + "/" + pageSize : request;
-            var response = await _client.GetAsync(request);
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(fileFilterDto);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var httpResponse = await _client.PostAsync("", httpContent);
 
-            if (response.IsSuccessStatusCode)
+            if (httpResponse.IsSuccessStatusCode)
             {
-                var responseStream = await response.Content.ReadAsStreamAsync();
+                var responseStream = await httpResponse.Content.ReadAsStreamAsync();
                 var res = await JsonSerializer.DeserializeAsync<object>(responseStream);
                 return res;
             }
             else
             {
-                return new object[] { response.StatusCode, response.ReasonPhrase };
+                return new object[] { httpResponse.StatusCode, httpResponse.ReasonPhrase };
             }
         }
 
         public async Task<HttpResponseMessage> GetByIdAsync(string request)
         { 
-            var response = await _client.GetAsync(request);
-            return response;
+            var httpResponse = await _client.GetAsync(request);
+            return httpResponse;
         }
     }
 }

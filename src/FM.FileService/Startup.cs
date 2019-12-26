@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using FM.FileService.Data;
 using FM.FileService.Data.Seed;
 using FM.FileService.DataAccess;

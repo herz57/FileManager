@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using FM.FileService.DataAccess;
-using FM.FileService.Domain.DTOs;
-using FM.FileService.Domain.Entities;
+using FM.Common.Domain.DTOs;
+using FM.FileService.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,35 +13,23 @@ namespace FM.FileService.Controllers
     [Route("api/filehistory")]
     public class FileReadHistoryController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly FileManager _fileManager;
 
-        public FileReadHistoryController(UnitOfWork unitOfWork, IMapper mapper)
+        public FileReadHistoryController(IMapper mapper, FileManager fileManager)
         {
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _fileManager = fileManager;
         }
 
-        [HttpGet("{fileId}")]
-        public async Task<ActionResult<FileReadHistoryDto[]>> GetFileReadHistoryAsync([FromRoute]Guid fileId)
+        [HttpGet("{fileId}/{pageIndex?}/{itemsPage?}")]
+        public async Task<ActionResult<FileReadHistoryDto[]>> GetFileReadHistoryAsync([FromRoute]Guid fileId, 
+            [FromRoute]int pageIndex = 0,
+            [FromRoute]int itemsPage = 10)
         {
-            var histories = await _unitOfWork.FileReadHistoryRepository.GetAsync(p => p.FileId == fileId);
+            var histories = await _fileManager.GetFileHistoriesAsync(fileId, pageIndex, itemsPage);
             var mappedHistories = _mapper.Map<FileReadHistoryDto[]>(histories);
             return mappedHistories;
-        }
-
-        [HttpPost("{userId}/{fileId}")]
-        public async Task<IActionResult> CreateFileReadOrder([FromRoute]string userId, [FromRoute]Guid fileId)
-        {
-            FileReadHistoryEntity fileReadOrder = new FileReadHistoryEntity
-            {
-                FileId = fileId,
-                UserId = userId
-            };
-
-            await _unitOfWork.FileReadHistoryRepository.CreateAsync(fileReadOrder);
-            await _unitOfWork.SaveChangesAsync();
-            return Ok();
         }
     }
 }

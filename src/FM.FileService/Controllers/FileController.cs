@@ -9,14 +9,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using FM.FileService.Domain.Entities;
-using FM.FileService.Domain.DTOs;
 using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
-using FM.FileService.Data.Specification.FileSpecification;
-using FM.FileService.Filters;
-using FM.Common.Enums;
-using System.Linq.Expressions;
-using FM.FileService.Data;
+using FM.Common.Domain.DTOs;
+using FM.Common.Filters;
 
 namespace FM.FileService.Controllers
 {
@@ -35,7 +31,7 @@ namespace FM.FileService.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult<FileDto[]>> GetFilesAsync([FromBody]FileFilterDto fileFilterDto)
         {
             var result = await _fileManager.GetFilesAsync(fileFilterDto);
@@ -58,7 +54,15 @@ namespace FM.FileService.Controllers
                 return StatusCode(403);
             }
 
+            var fileReadHistoryEntity = new FileReadHistoryEntity
+            {
+                UserId = userId,
+                FileId = file.Id
+            };
+
             FileStream fs = new FileStream(file.Path, FileMode.Open);
+            await _unitOfWork.FileReadHistoryRepository.CreateAsync(fileReadHistoryEntity);
+            await _unitOfWork.SaveChangesAsync();
             return File(fs, $"application/{file.Extension}", file.Name);
         }
 
@@ -83,7 +87,7 @@ namespace FM.FileService.Controllers
                     Size = fileToRecord.Length / 1024
                 };
 
-                var fileResult = await _unitOfWork.FileRepository.CreateAsync(file);
+                await _unitOfWork.FileRepository.CreateAsync(file);
             }
             
             await _unitOfWork.SaveChangesAsync();
