@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FM.Common.Filters
+namespace FM.FileService.Filters
 {
     public class FileFilters
     {

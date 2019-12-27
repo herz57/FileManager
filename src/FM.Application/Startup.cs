@@ -21,8 +21,6 @@ using FM.Common.Options;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation.AspNetCore;
 using FluentValidation;
-using FM.Common.Filters;
-using FM.Application.Infrastructure.Validation;
 
 namespace FM.Application
 {
@@ -48,10 +46,7 @@ namespace FM.Application
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddMvc(option => option.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddFluentValidation();
-
-            services.AddTransient<IValidator<FileFilterDto>, FileFilterDtoValidator>();
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace FM.Common.Domain.DTOs
+namespace FM.FileService.Domain.DTOs
 {
     public class FileUploadResult
     {

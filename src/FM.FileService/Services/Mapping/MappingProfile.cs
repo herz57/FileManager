@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FM.Common.Domain.DTOs;
+using FM.FileService.Domain.DTOs;
 using FM.Common.Extensions;
 using FM.FileService.Domain.Entities;
 using System;

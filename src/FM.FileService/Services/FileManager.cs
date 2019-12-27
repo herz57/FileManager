@@ -10,12 +10,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
-using FM.Common.Enums;
+using FM.FileService.Enums;
 using FM.FileService.Data.Specification.FileSpecification;
 using FM.Common.Extensions;
 using FM.Common.DataAccess.Interfaces;
-using FM.Common.Filters;
-using FM.Common.Domain.DTOs;
+using FM.FileService.Filters;
+using FM.FileService.Domain.DTOs;
 
 namespace FM.FileService.Services
 {

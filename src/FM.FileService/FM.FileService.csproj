@@ -25,8 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Files\" />
-    <Folder Include="Files\5a8201fd-6d6b-4d2c-81d0-56d5858b6037\" />
-    <Folder Include="Infrastructure\" />
+    <Folder Include="Files\2fe87572-0b44-44d8-9c43-61e1902536e1\" />
   </ItemGroup>
 
   <ItemGroup>

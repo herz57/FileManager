@@ -9,10 +9,13 @@ using FM.Common.Options;
 using FM.FileService.Data;
 using FM.FileService.Data.Seed;
 using FM.FileService.DataAccess;
+using FM.FileService.Filters;
+using FM.FileService.Infrastructure.Validation;
 using FM.FileService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +42,14 @@ namespace FM.FileService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddFluentValidation();
+
+            services.AddTransient<IValidator<FileFilterDto>, FileFilterDtoValidator>();
+
+            services.AddTransient<IValidator<List<IFormFile>>, FormFileListValidator>();
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
@@ -85,11 +96,16 @@ namespace FM.FileService
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMvc();
 
             app.UseEndpoints(endpoints =>
             {

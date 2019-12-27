@@ -1,6 +1,4 @@
 ﻿using FM.Common.DataAccess.Interfaces;
-using FM.Common.Enums;
-using FM.FileService.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

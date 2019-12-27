@@ -1,10 +1,10 @@
-﻿using FM.Common.Enums;
+﻿using FM.FileService.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FM.Common.Filters
+namespace FM.FileService.Filters
 {
     public class FileFilterDto
     {

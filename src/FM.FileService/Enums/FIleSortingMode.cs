@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FM.Common.Enums
+namespace FM.FileService.Enums
 {
     public enum FileSortingMode
     {

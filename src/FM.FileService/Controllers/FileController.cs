@@ -11,8 +11,8 @@ using Microsoft.Extensions.Logging;
 using FM.FileService.Domain.Entities;
 using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
-using FM.Common.Domain.DTOs;
-using FM.Common.Filters;
+using FM.FileService.Domain.DTOs;
+using FM.FileService.Filters;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
@@ -72,6 +72,7 @@ namespace FM.FileService.Controllers
         }
 
         [Authorize]
+        [RequestSizeLimit(52_428_800)]
         [HttpPost]
         public async Task<IActionResult> AddFileAsync([FromForm(Name = "file")]List<IFormFile> uploadFiles)
         {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FM.Common.Domain.DTOs;
+using FM.FileService.Domain.DTOs;
 using FM.FileService.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
