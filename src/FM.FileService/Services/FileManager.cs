@@ -52,12 +52,18 @@ namespace FM.FileService.Services
                         Message = $"File {fileToUpload.FileName} has already exists."
                     };
                 }
+            }
+
+            foreach (var fileToUpload in uploadFiles)
+            {
+                filePath = string.Format("{0}{1}{2}", directoryPath, Path.DirectorySeparatorChar, fileToUpload.FileName);
 
                 using (var fileStream = new FileStream(_appEnvironment.WebRootPath + filePath, FileMode.Create))
                 {
                     await fileToUpload.CopyToAsync(fileStream);
                 }
             }
+
             return new FileUploadResult
             {
                 IsSuccess = true,

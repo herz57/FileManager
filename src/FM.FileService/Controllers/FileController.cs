@@ -143,32 +143,43 @@ namespace FM.FileService.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{fileId}")]
-        public async Task<IActionResult> DeleteFile([FromRoute]Guid fileId)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteFile([FromBody]Guid[] fileIds)
         {
-            var file = await _unitOfWork.FileRepository.FindAsync(fileId);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            FileEntity[] files = new FileEntity[fileIds.Length];
+            int i = 0;
 
-            if (file == null)
+            foreach (var fileId in fileIds)
             {
-                return NotFound();
+                files[i] = await _unitOfWork.FileRepository.FindAsync(fileId);
+
+                if (files[i] == null)
+                {
+                    return NotFound();
+                }
+
+                if (files[i].UserId != userId)
+                {
+                    return StatusCode(403);
+                }
+
+                i++;
             }
 
-            if (file.UserId != userId)
+            foreach (var file in files)
             {
-                return StatusCode(403);
+                if (System.IO.File.Exists(file.Path))
+                {
+                    System.IO.File.Delete(file.Path);
+                }
+
+                _unitOfWork.FileRepository.Delete(file.Id);
+                var histories = await _unitOfWork.FileReadHistoryRepository.GetAsync(p => p.FileId == file.Id);
+                _unitOfWork.FileReadHistoryRepository.DeleteRange(histories);
             }
 
-            if (System.IO.File.Exists(file.Path))
-            {
-                System.IO.File.Delete(file.Path);
-            }
-
-            _unitOfWork.FileRepository.Delete(file.Id);
-            var files = await _unitOfWork.FileReadHistoryRepository.GetAsync(p => p.FileId == fileId);
-            _unitOfWork.FileReadHistoryRepository.DeleteRange(files);
             await _unitOfWork.SaveChangesAsync();
-
             return Ok();
         }
     }
