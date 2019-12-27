@@ -27,14 +27,6 @@ namespace FM.Application.Controllers
             _mapper = mapper;
         }
 
-        //[Authorize]
-        [HttpGet]
-        public string Get()
-        {
-            var accessToken = Request.Headers["Authorization"];
-            return "yjg";
-        }
-
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser([FromBody]CreateUserDto userDto)
         {
@@ -52,6 +44,40 @@ namespace FM.Application.Controllers
             var responseUser = _mapper.Map<UserDto>(user);
 
             return Ok(responseUser);
+        }
+
+        [Authorize]
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUser([FromRoute]string userId)
+        {
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (userId != user.Id)
+            {
+                return BadRequest();
+            }
+
+            await _userManager.DeleteAsync(user);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> ChangePasswordUser([FromBody]ChangePasswordDto changePasswordDto)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok();
         }
     }
 }

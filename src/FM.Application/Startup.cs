@@ -21,6 +21,8 @@ using FM.Common.Options;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using FM.Application.Domain.DTOs;
+using FM.Application.Infrastructure.Validation;
 
 namespace FM.Application
 {
@@ -47,6 +49,10 @@ namespace FM.Application
 
             services.AddMvc(option => option.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddTransient<IValidator<CreateUserDto>, CreateUserValidator>();
+
+            services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));

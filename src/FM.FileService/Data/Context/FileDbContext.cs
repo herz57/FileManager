@@ -8,6 +8,8 @@ namespace FM.FileService.Data
     {
         public DbSet<FileEntity> Files { get; set; }
         public DbSet<FileReadHistoryEntity> FileReadHistories { get; set; }
+        public DbSet<FilesSizeForUserEntity> FilesSizeForUsers { get; set; }
+
         public FileDbContext(DbContextOptions<FileDbContext> options)
             : base(options)
         {
@@ -18,6 +20,7 @@ namespace FM.FileService.Data
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new FileEntityConfiguration());
             builder.ApplyConfiguration(new FileReadHistoryEntityConfiguration());
+            builder.ApplyConfiguration(new FilesSizeForUserEntityConfiguration());
         }
     }
 }

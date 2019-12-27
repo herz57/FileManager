@@ -16,6 +16,7 @@ using FM.Common.Extensions;
 using FM.Common.DataAccess.Interfaces;
 using FM.FileService.Filters;
 using FM.FileService.Domain.DTOs;
+using FM.FileService.Extensions;
 
 namespace FM.FileService.Services
 {
@@ -30,9 +31,8 @@ namespace FM.FileService.Services
             _context = context;
         }
 
-        public async Task<FileUploadResult> AddFileAsync(List<IFormFile> uploadFiles, string directoryPath)
+        public async Task<FileUploadResult> AddFileAsync(List<IFormFile> uploadFiles, string directoryPath, long size)
         {
-            long size = uploadFiles.Sum(f => f.Length) / 1024;
             string filePath;
 
             if (!Directory.Exists(directoryPath))

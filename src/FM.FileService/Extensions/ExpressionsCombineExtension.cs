@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace FM.Common.Extensions
+namespace FM.FileService.Extensions
 {
     static class ExpressionsCombineExtension
     {
