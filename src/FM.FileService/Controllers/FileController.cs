@@ -77,52 +77,26 @@ namespace FM.FileService.Controllers
         public async Task<IActionResult> AddFileAsync([FromForm(Name = "file")]List<IFormFile> uploadFiles)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userFilesSize = await _unitOfWork.FilesSizeForUserEntity.GetAsync(f => f.UserId == userId);
+            var userFilesSize = (await _unitOfWork.FilesSizeForUserEntity.GetAsync(f => f.UserId == userId)).FirstOrDefault();
             long size = uploadFiles.Sum(f => f.Length) / 1024;
 
-            if ((userFilesSize.FirstOrDefault().FilesSize + size) > 102400)
+            if (userFilesSize != null && (userFilesSize.FilesSize + size) > 102400)
             {
                 return BadRequest("Size of files on the disk cannot exceed 100 mb. Please delete some files.");
             }
 
             string path = string.Format("..{0}FM.FileService{0}Files{0}{1}", Path.DirectorySeparatorChar, userId);
             
-            var uploadFilesResult = await _fileManager.AddFileAsync(uploadFiles, path, size);
+            var uploadFilesResult = await _fileManager.AddFilesToDiscAsync(uploadFiles, path, size);
 
             if (!uploadFilesResult.IsSuccess)
             {
                 return BadRequest(uploadFilesResult.Message);
             }
 
-            foreach (var fileToRecord in uploadFiles)
-            {
-                FileEntity file = new FileEntity
-                {
-                    Name = fileToRecord.FileName,
-                    Path = string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, fileToRecord.FileName),
-                    UserId = userId,
-                    Size = fileToRecord.Length / 1024
-                };
+            await _fileManager.AddFilesToDbAsync(uploadFiles, userId, path);
 
-                await _unitOfWork.FileRepository.CreateAsync(file);
-            }
-
-            if (userFilesSize.Length == 0)
-            {
-                FilesSizeForUserEntity filesSizeForUserEntity = new FilesSizeForUserEntity
-                {
-                    UserId = userId,
-                    FilesSize = size
-                };
-
-                await _unitOfWork.FilesSizeForUserEntity.CreateAsync(filesSizeForUserEntity);
-            }
-            else
-            {
-                var userFilesSizeItem = userFilesSize.FirstOrDefault();
-                userFilesSizeItem.FilesSize += size;
-                _unitOfWork.FilesSizeForUserEntity.Update(userFilesSizeItem);
-            }
+            await _fileManager.AddUserFilesSizeAsync(userFilesSize, userId, size);
 
             await _unitOfWork.SaveChangesAsync();
 
@@ -173,44 +147,13 @@ namespace FM.FileService.Controllers
         public async Task<IActionResult> DeleteFile([FromBody]Guid[] fileIds)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            FileEntity[] files = new FileEntity[fileIds.Length];
-            int i = 0;
+            var filesDeletionResult = await _fileManager.FilesDeletionAsync(fileIds, userId);
 
-            foreach (var fileId in fileIds)
+            if (filesDeletionResult != 0)
             {
-                files[i] = await _unitOfWork.FileRepository.FindAsync(fileId);
-
-                if (files[i] == null)
-                {
-                    return NotFound();
-                }
-
-                if (files[i].UserId != userId)
-                {
-                    return StatusCode(403);
-                }
-
-                i++;
+                return StatusCode(filesDeletionResult);
             }
-
-            foreach (var file in files)
-            {
-                if (System.IO.File.Exists(file.Path))
-                {
-                    System.IO.File.Delete(file.Path);
-                }
-
-                _unitOfWork.FileRepository.Delete(file.Id);
-                var histories = await _unitOfWork.FileReadHistoryRepository.GetAsync(p => p.FileId == file.Id);
-                _unitOfWork.FileReadHistoryRepository.DeleteRange(histories);
-            }
-
-            long size = files.Sum(f => f.Size);
-            var userFilesSize = (await _unitOfWork.FilesSizeForUserEntity.GetAsync(f => f.UserId == userId)).FirstOrDefault();
-
-            userFilesSize.FilesSize -= size;
-            _unitOfWork.FilesSizeForUserEntity.Update(userFilesSize);
-
+           
             await _unitOfWork.SaveChangesAsync();
             return Ok();
         }
