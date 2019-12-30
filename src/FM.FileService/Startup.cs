@@ -83,6 +83,7 @@ namespace FM.FileService
                 c.AddPolicy("AllowOrigin", options => options
                     .WithOrigins("http://localhost:4200")
                     .AllowAnyMethod()
+                    .AllowCredentials()
                     .AllowAnyHeader());
             });
         }

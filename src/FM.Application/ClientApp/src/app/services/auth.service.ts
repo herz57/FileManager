@@ -53,11 +53,17 @@ export class AuthService {
     return localStorage.getItem('refresh_token');
   }
 
+  getExpireAtToken() {
+    return localStorage.getItem('expiresAt')
+  }
+
   loggedIn() {
     return !!localStorage.getItem('access_token')    
   }
 
   private storeTokens(tokens) {
+    let expiresAt: Number = (new Date().getTime() + tokens.expires_in * 1000);
+    localStorage.setItem('expiresAt', expiresAt.toString())
     localStorage.setItem('access_token', tokens.access_token);
     localStorage.setItem('refresh_token', tokens.refresh_token);
   }

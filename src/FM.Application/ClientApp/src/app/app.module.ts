@@ -12,19 +12,25 @@ import { TokenInterceptorService } from './services/token_interceptor.service';
 import { DriveComponent } from './drive/drive.component';
 import { AuthGuard } from './guards/auth.guard';
 import { IsNotLoggedInGuard } from './guards/is_not_logged_in.guard';
+import { NgFormUploadComponent } from './ng-form-upload/ng-form-upload.component';
+import { FileUploadModule } from 'ng2-file-upload';
+import { AccountComponent } from './account/account.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    DriveComponent
+    DriveComponent,
+    NgFormUploadComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FileUploadModule
   ],
   providers: [AuthService, AuthGuard, IsNotLoggedInGuard,
     {

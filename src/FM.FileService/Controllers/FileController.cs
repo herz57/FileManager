@@ -34,7 +34,7 @@ namespace FM.FileService.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpPost("{files}")]
         public async Task<ActionResult<FileDto[]>> GetFilesAsync([FromBody]FileFilterDto fileFilterDto)
         {
             var result = await _fileManager.GetFilesAsync(fileFilterDto);
@@ -100,7 +100,7 @@ namespace FM.FileService.Controllers
 
             await _unitOfWork.SaveChangesAsync();
 
-            return Ok(uploadFilesResult);
+            return Ok("Files uploaded");
         }
 
         [Authorize]

@@ -71,9 +71,7 @@ namespace FM.FileService.Services
 
             return new FileUploadResult
             {
-                IsSuccess = true,
-                Count = uploadFiles.Count,
-                Size = size
+                IsSuccess = true
             };
         }
 

@@ -54,8 +54,8 @@ namespace STP.Identity.Application
                         Scopes.FileService
                     },
                     AllowedCorsOrigins =     { "http://localhost:4200" },
-                    AccessTokenLifetime = 1200,
-                    IdentityTokenLifetime = 1200
+                    AccessTokenLifetime = 300,
+                    IdentityTokenLifetime = 300
                 }
             };
         }

@@ -5,19 +5,10 @@ import { RegisterComponent } from './register/register.component'
 import { DriveComponent } from './drive/drive.component';
 import { AuthGuard } from './guards/auth.guard';
 import { IsNotLoggedInGuard } from './guards/is_not_logged_in.guard';
-// import { SpecialEventsComponent } from './special-events/special-events.component';
+import { NgFormUploadComponent } from './ng-form-upload/ng-form-upload.component';
+import { AccountComponent } from './account/account.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: '/events',
-    pathMatch: 'full'
-  },
-  // {
-  //   path: 'special',
-  //   canActivate: [AuthGuard],
-  //   component: SpecialEventsComponent
-  // }, 
   {
     path: 'login',
     component: LoginComponent,
@@ -31,6 +22,16 @@ const routes: Routes = [
   {
     path: 'drive',
     component: DriveComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'upload-files',
+    component: NgFormUploadComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'account',
+    component: AccountComponent,
     canActivate: [AuthGuard]
   }
 ];

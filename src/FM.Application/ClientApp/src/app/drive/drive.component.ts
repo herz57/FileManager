@@ -11,13 +11,16 @@ import { of } from 'rxjs';
 })
 export class DriveComponent implements OnInit {
 
-  filesUrl = "http://localhost:5001/api/fileapp";
+  filesUrl = "http://localhost:5000/api/file/files";
   response: any;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.http.get<any>(this.filesUrl)
+    let body = {
+
+    }
+    this.http.post<any>(this.filesUrl, body)
     .subscribe((data) => this.response = JSON.stringify(data));
   }
 }
