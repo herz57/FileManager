@@ -4,7 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-changepass',
   templateUrl: './changepass.component.html',
-  styleUrls: ['./changepass.component.scss']
+  styleUrls: ['../../shared/styles/form.scss', './changepass.component.scss']
 })
 export class ChangepassComponent implements OnInit {
 

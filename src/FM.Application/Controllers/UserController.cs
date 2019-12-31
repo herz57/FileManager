@@ -47,12 +47,12 @@ namespace FM.Application.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteUser([FromRoute]string userId)
+        [HttpDelete("{password}")]
+        public async Task<IActionResult> DeleteUser([FromRoute]string password)
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            if (userId != user.Id)
+            
+            if (!await _userManager.CheckPasswordAsync(user, password))
             {
                 return BadRequest();
             }
