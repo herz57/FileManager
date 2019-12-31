@@ -3,7 +3,6 @@ import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, tap } from 'rxjs/operators';
-import { request } from 'http';
 import { Router } from '@angular/router';
  
 const URL = 'http://localhost:5000/api/file/';
@@ -29,30 +28,27 @@ export class NgFormUploadComponent {
     this.uploader = new FileUploader({
       url: URL,
       formatDataFunction: async (item) => {
-        return http.post<any>(URL, item)
+        return http.post<any>(URL, item).subscribe(res => console.log('res: ', res))
       }
     });
 
+    this.uploader.onSuccessItem = (item, response, status) => this.onSuccessItem(item, response);
     this.uploader.onErrorItem = (item, response, status) => this.onErrorItem(item, response, status);
-    this.uploader.onSuccessItem = (item, response, status) => this.onSuccessItem(item, response, status);
  
     this.hasBaseDropZoneOver = false;
     this.addHeaders()
   }
 
-  onSuccessItem(item: FileItem, response: string, status: number): any {
+  onSuccessItem(item: FileItem, response: string): any {
     this.response = response
-    this.statusCode = status;
     this.responseColor = 'green'
   }
 
   onErrorItem(item: FileItem, response: string, status: number): any {
     if (status >= 400) {
       this.response = response
-      this.statusCode = status;
+      this.responseColor = 'red'
       if (status == 401) {
-        this.responseColor = 'red'
-        console.log('401 handle')
         this.authService.refreshToken()
          .subscribe(() => this.handle401Error(), 
           () => this._router.navigate(['/login']));
@@ -61,6 +57,10 @@ export class NgFormUploadComponent {
   }
 
   handle401Error() {
+    for (let i = 0; i < this.uploader.queue.length; i++) {
+      this.uploader.queue[i].isUploaded = false;
+    }
+    
     this.addHeaders()
     this.uploader.uploadAll()
   }
