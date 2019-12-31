@@ -1,0 +1,36 @@
+.changepass_cont {
+    padding: 0;
+
+    .separator {
+        border-right: 1px solid #dfdfe0; 
+    }
+    .icon-btn-save {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .input-group {
+        margin-bottom: 10px; 
+        width: 250px;
+    }
+    .btn-save-label {
+        position: relative;
+        left: -12px;
+        display: inline-block;
+        padding: 6px 12px;
+        background: rgba(0,0,0,0.15);
+        border-radius: 3px 0 0 3px;
+    }
+
+    .btn-success {
+        padding: 3px;
+        padding-right: 25px;
+        padding-left: 25px;
+        margin-top: 10px;
+        background: rgb(52, 123, 255);
+        border: none;
+
+        &:hover {
+            background: rgb(36, 105, 231);
+        }
+    }
+}

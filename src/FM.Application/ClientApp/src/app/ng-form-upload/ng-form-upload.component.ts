@@ -28,7 +28,7 @@ export class NgFormUploadComponent {
     this.uploader = new FileUploader({
       url: URL,
       formatDataFunction: async (item) => {
-        return http.post<any>(URL, item).subscribe(res => console.log('res: ', res))
+        return http.post<any>(URL, item)
       }
     });
 

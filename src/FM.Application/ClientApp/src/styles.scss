@@ -8,7 +8,11 @@ html, body, div, span {
     font: inherit;
     vertical-align: baseline;
   }
-  
+
+  .container {
+    padding-top: 30px;
+  }
+
   article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
     display: block;
   }

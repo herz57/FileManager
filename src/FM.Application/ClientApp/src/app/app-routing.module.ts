@@ -7,8 +7,21 @@ import { AuthGuard } from './guards/auth.guard';
 import { IsNotLoggedInGuard } from './guards/is_not_logged_in.guard';
 import { NgFormUploadComponent } from './ng-form-upload/ng-form-upload.component';
 import { AccountComponent } from './account/account.component';
+import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.component';
+import { ChangepassComponent } from './account/changepass/changepass.component';
+
+const accountChildRoutes: Routes = [
+  { path: 'changepass', component: ChangepassComponent},
+  { path: 'deleteaccount', component: DeleteaccountComponent},
+];
 
 const routes: Routes = [
+  { 
+    path: '',  
+    redirectTo: '/login',
+    pathMatch: 'full',
+    canActivate: [IsNotLoggedInGuard]
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -32,6 +45,7 @@ const routes: Routes = [
   {
     path: 'account',
     component: AccountComponent,
+    children: accountChildRoutes,
     canActivate: [AuthGuard]
   }
 ];

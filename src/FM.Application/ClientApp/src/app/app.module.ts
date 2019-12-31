@@ -15,6 +15,8 @@ import { IsNotLoggedInGuard } from './guards/is_not_logged_in.guard';
 import { NgFormUploadComponent } from './ng-form-upload/ng-form-upload.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { AccountComponent } from './account/account.component';
+import { ChangepassComponent } from './account/changepass/changepass.component';
+import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { AccountComponent } from './account/account.component';
     RegisterComponent,
     DriveComponent,
     NgFormUploadComponent,
-    AccountComponent
+    AccountComponent,
+    ChangepassComponent,
+    DeleteaccountComponent
   ],
   imports: [
     BrowserModule,
