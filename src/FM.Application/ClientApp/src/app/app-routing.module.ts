@@ -9,6 +9,7 @@ import { NgFormUploadComponent } from './ng-form-upload/ng-form-upload.component
 import { AccountComponent } from './account/account.component';
 import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.component';
 import { ChangepassComponent } from './account/changepass/changepass.component';
+import { ForgotpasswordComponent } from './forgot-password/forgot-password.component';
 
 const accountChildRoutes: Routes = [
   { path: 'changepass', component: ChangepassComponent},
@@ -47,7 +48,12 @@ const routes: Routes = [
     component: AccountComponent,
     children: accountChildRoutes,
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotpasswordComponent,
+    canActivate: [IsNotLoggedInGuard]
+  },
 ];
 
 @NgModule({

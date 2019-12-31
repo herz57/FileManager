@@ -7,8 +7,8 @@
                 <input class="text" [(ngModel)]="loginUserData.password" type="password" name="password" placeholder="Password" required="">
                 <input type="submit" (click)="loginUser()" value="SIGN IN">
             </form>
-            <p>Don't have an account? <a href="#"> Sign up</a></p>
-            <p><a href="#"> Forgot password</a></p>
+            <p>Don't have an account? <a routerLink="/register"> Sign up</a></p>
+            <p><a routerLink="/forgot-password"> Forgot password</a></p>
         </div>
     </div>
 </div>

@@ -70,7 +70,7 @@ namespace FM.Application.Controllers
 
             var user = await _userManager.FindByIdAsync(userId);
 
-            var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
 
             if (!result.Succeeded)
             {

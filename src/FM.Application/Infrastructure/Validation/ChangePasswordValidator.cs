@@ -11,7 +11,7 @@ namespace FM.Application.Infrastructure.Validation
     {
         public ChangePasswordValidator()
         {
-            RuleFor(c => c.OldPassword)
+            RuleFor(c => c.CurrentPassword)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Old Password cannot be null or empty")
@@ -29,7 +29,7 @@ namespace FM.Application.Infrastructure.Validation
                 .WithMessage("Password must has minimum 8 and maximum 20 characters");
 
             RuleFor(p => p.NewPassword)
-                .Equal(p => p.ConfirmNewPassword)
+                .Equal(p => p.ConfirmPassword)
                 .WithMessage("Passwords don`t match");
         }
     }

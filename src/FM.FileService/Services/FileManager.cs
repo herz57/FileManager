@@ -170,10 +170,10 @@ namespace FM.FileService.Services
         }
             
 
-        public async Task<IReadOnlyList<FileEntity>> GetFilesAsync(FileFilterDto fileFilterDto)
+        public async Task<IReadOnlyList<FileEntity>> GetFilesAsync(FileFilterDto fileFilterDto, string userId)
         {
             Expression<Func<FileEntity, object>> sortingColumnExp = null;
-            Expression<Func<FileEntity, bool>> criterias = f => true;
+            Expression<Func<FileEntity, bool>> criterias = f => f.UserId == userId;
 
             if (fileFilterDto.Filters != null)
             {

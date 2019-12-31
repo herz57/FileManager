@@ -1,6 +1,10 @@
 $custom_gray_color: rgb(51, 51, 51);
 $custom_green_color: rgb(59, 187, 70);
 
+.container {
+    padding-top: 0;
+}
+
 .well {
     height: 300px;
     text-align: center;

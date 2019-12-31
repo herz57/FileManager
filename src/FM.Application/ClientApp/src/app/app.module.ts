@@ -17,6 +17,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { AccountComponent } from './account/account.component';
 import { ChangepassComponent } from './account/changepass/changepass.component';
 import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.component';
+import { ForgotpasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.co
     NgFormUploadComponent,
     AccountComponent,
     ChangepassComponent,
-    DeleteaccountComponent
+    DeleteaccountComponent,
+    ForgotpasswordComponent
   ],
   imports: [
     BrowserModule,

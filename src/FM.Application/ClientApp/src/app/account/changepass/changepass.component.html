@@ -1,44 +1,52 @@
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2 changepass_cont">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2 changepass_cont">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">
                         Change password   
                     </h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div style="margin-top:20px;" class="col-xs-6 col-sm-6 col-md-6 login-box">
-                         <div class="form-group">
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div style="margin-top:20px;" class="col-xs-6 col-sm-6 col-md-6 login-box">
+                        <div class="form-group">
                             <div class="input-group">
-                              <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
-                              <input class="form-control" type="password" placeholder="Current Password">
+                                <input class="form-control" name="currentpassword" #currentpassword="ngModel" [(ngModel)]="changePasswordUserData.currentpassword" type="password" placeholder="Current Password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})">
+                                <div [hidden]="currentpassword.valid || currentpassword.untouched" class="alert-message">
+                                    Incorrect password format
+                                </div>
                             </div>
-                          </div>
-                          <div class="form-group">
+                        </div>
+                        <div class="form-group">
                             <div class="input-group">
-                              <div class="input-group-addon"><span class="glyphicon glyphicon-log-in"></span></div>
-                              <input class="form-control" type="password" placeholder="New Password">
+                                <input class="form-control" name="newpassword" #newpassword="ngModel" [(ngModel)]="changePasswordUserData.newpassword" type="password" placeholder="New Password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})">
+                                <div [hidden]="newpassword.valid || newpassword.untouched" class="alert-message">
+                                    Incorrect password format
+                                </div>
                             </div>
-                          </div>
-                          <div class="form-group">
+                        </div>
+                        <div class="form-group">
                             <div class="input-group">
-                              <div class="input-group-addon"><span class="glyphicon glyphicon-log-in"></span></div>
-                              <input class="form-control" type="password" placeholder="Confirm Password">
+                                <input class="form-control" name="confirmpassword" #confirmpassword="ngModel" [(ngModel)]="changePasswordUserData.confirmpassword" type="password" placeholder="Confirm Password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})">
+                                <div [hidden]="confirmpassword.valid || confirmpassword.untouched" class="alert-message">
+                                    Incorrect password format
+                                </div>
                             </div>
-                          </div>
+                            <small class="form-text text-muted">Password must has minimum 8 and maximum 20 characters, 
+                                at least one lowercase and one uppercase letter, 
+                                one number, one special character.
+                            </small>
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <button class="btn icon-btn-save btn-success" type="submit">Save</button>
-                        </div>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <button class="btn icon-btn-save btn-success" type="submit" (click)="changePassword()">Save</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>

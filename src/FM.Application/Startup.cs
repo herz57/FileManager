@@ -48,6 +48,7 @@ namespace FM.Application
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddMvc(option => option.EnableEndpointRouting = false)
+                .AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddTransient<IValidator<CreateUserDto>, CreateUserValidator>();
