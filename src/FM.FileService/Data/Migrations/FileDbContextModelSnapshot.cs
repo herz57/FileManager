@@ -78,27 +78,6 @@ namespace FM.FileService.Data.Migrations
                     b.ToTable("FileReadHistories");
                 });
 
-            modelBuilder.Entity("FM.FileService.Domain.Entities.FilesSizeForUserEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("FilesSize")
-                        .HasColumnType("bigint")
-                        .HasMaxLength(209715200);
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("UserId");
-
-                    b.ToTable("FilesSizeForUsers");
-                });
-
             modelBuilder.Entity("FM.FileService.Domain.Entities.FileReadHistoryEntity", b =>
                 {
                     b.HasOne("FM.FileService.Domain.Entities.FileEntity", "File")

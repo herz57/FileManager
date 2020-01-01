@@ -12,8 +12,8 @@
                     <div style="margin-top:20px;" class="col-xs-6 col-sm-6 col-md-6 login-box">
                         <div class="form-group">
                             <div class="input-group">
-                                <input class="form-control" name="password" #password="ngModel" [(ngModel)]="password.value" type="password" placeholder="Password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})">
-                                <div [hidden]="password.valid || password.untouched" class="alert-message">
+                                <input class="form-control" name="pass" #pass="ngModel" [(ngModel)]="passwordUserData.value" type="password" placeholder="Password" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$#!%*?&])[A-Za-z\d$@$#!%*?&].{7,20}">
+                                <div [hidden]="pass.valid || pass.untouched" class="alert-message">
                                     Incorrect password format
                                 </div>
                             </div>
@@ -24,10 +24,11 @@
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6">
-                        <button class="btn icon-btn-save" type="submit" (click)="deleteUser()">Delete User</button>
+                        <button class="btn icon-btn-save" [disabled]="pass.invalid" type="submit" (click)="deleteUser()">Delete User</button>
                     </div>
                 </div>
             </div>
+            <div class="deleteResult" *ngIf="deleteResult">{{deleteResult}}</div> 
         </div>
     </div>
 </div>

@@ -91,54 +91,30 @@ namespace FM.FileService.Services
             }
         }
 
-        public async Task AddUserFilesSizeAsync(FilesSizeForUserEntity userFilesSize, string userId, long size)
+        public async Task DeleteFromDiscAsync(FileEntity[] files)
         {
-            if (userFilesSize == null)
+            Task.Run(() =>
             {
-                FilesSizeForUserEntity filesSizeForUserEntity = new FilesSizeForUserEntity
+                foreach (var file in files)
                 {
-                    UserId = userId,
-                    FilesSize = size
-                };
-
-                await _unitOfWork.FilesSizeForUserEntity.CreateAsync(filesSizeForUserEntity);
-            }
-            else
-            {
-                var userFilesSizeItem = userFilesSize;
-                userFilesSizeItem.FilesSize += size;
-                _unitOfWork.FilesSizeForUserEntity.Update(userFilesSizeItem);
-            }
+                    if (File.Exists(file.Path))
+                    {
+                        File.Delete(file.Path);
+                    }
+                }
+            });
         }
 
-        public async Task<int> FilesDeletionAsync(Guid[] fileIds, string userId)
+        public async Task DeleteFromDbAsync(FileEntity[] files)
+        {
+            _unitOfWork.FileRepository.DeleteRange(files);
+            var histories = await _unitOfWork.FileReadHistoryRepository.GetAsync(p => p.FileId == files.FirstOrDefault().Id);
+            _unitOfWork.FileReadHistoryRepository.DeleteRange(histories);
+        }
+
+        public async Task<int> FilesDeletingAsync(Guid[] fileIds, string userId)
         {
             FileEntity[] files = new FileEntity[fileIds.Length];
-            var checkFilesResult = await FilesDeletingCheckAsync(fileIds, userId, files);
-
-            if (checkFilesResult != 0)
-            {
-                return checkFilesResult;
-            }
-
-            foreach (var file in files)
-            {
-                if (File.Exists(file.Path))
-                {
-                    File.Delete(file.Path);
-                }
-
-                _unitOfWork.FileRepository.Delete(file.Id);
-                var histories = await _unitOfWork.FileReadHistoryRepository.GetAsync(p => p.FileId == file.Id);
-                _unitOfWork.FileReadHistoryRepository.DeleteRange(histories);
-            }
-
-            await DeleteUserFilesSizeAsync(files, userId);
-            return checkFilesResult;
-        }
-
-        private async Task<int> FilesDeletingCheckAsync(Guid[] fileIds, string userId, FileEntity[] files)
-        {
             int i = 0;
 
             foreach (var fileId in fileIds)
@@ -157,19 +133,11 @@ namespace FM.FileService.Services
 
                 i++;
             }
+            DeleteFromDiscAsync(files);
+            await DeleteFromDbAsync(files);
             return 0;
         }
-
-        private async Task DeleteUserFilesSizeAsync(FileEntity[] files, string userId)
-        {
-            long size = files.Sum(f => f.Size);
-            var userFilesSize = (await _unitOfWork.FilesSizeForUserEntity.GetAsync(f => f.UserId == userId)).FirstOrDefault();
-
-            userFilesSize.FilesSize -= size;
-            _unitOfWork.FilesSizeForUserEntity.Update(userFilesSize);
-        }
             
-
         public async Task<IReadOnlyList<FileEntity>> GetFilesAsync(FileFilterDto fileFilterDto, string userId)
         {
             Expression<Func<FileEntity, object>> sortingColumnExp = null;

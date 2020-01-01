@@ -29,4 +29,8 @@ export class UserService {
     }, 
     err => console.log(err))
   }
+
+  deleteUser(passwordUserData: any) {
+    return this._http.delete<any>(this.URL + passwordUserData.value)
+  }
 }

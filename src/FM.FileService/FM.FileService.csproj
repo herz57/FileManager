@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Files\32ab2a1c-3179-461a-a5d7-92ebbc66a637\**" />
+    <Compile Remove="Files\9ac94fdf-08ec-4851-bad0-90a4945e65bb\**" />
+    <Content Remove="Files\32ab2a1c-3179-461a-a5d7-92ebbc66a637\**" />
+    <Content Remove="Files\9ac94fdf-08ec-4851-bad0-90a4945e65bb\**" />
+    <EmbeddedResource Remove="Files\32ab2a1c-3179-461a-a5d7-92ebbc66a637\**" />
+    <EmbeddedResource Remove="Files\9ac94fdf-08ec-4851-bad0-90a4945e65bb\**" />
+    <None Remove="Files\32ab2a1c-3179-461a-a5d7-92ebbc66a637\**" />
+    <None Remove="Files\9ac94fdf-08ec-4851-bad0-90a4945e65bb\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="EntityFramework" Version="6.4.0" />
@@ -25,8 +36,6 @@
 
   <ItemGroup>
     <Folder Include="Files\" />
-    <Folder Include="Files\32ab2a1c-3179-461a-a5d7-92ebbc66a637\" />
-    <Folder Include="Files\9ac94fdf-08ec-4851-bad0-90a4945e65bb\" />
   </ItemGroup>
 
   <ItemGroup>

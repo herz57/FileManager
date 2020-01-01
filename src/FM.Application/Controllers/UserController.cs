@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FM.Application.Domain.DTOs;
 using FM.Application.Domain.Entities;
+using FM.Application.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,15 @@ namespace FM.Application.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly InnerHttpClient _httpClient;
 
         public UserController(UserManager<User> userManager,
-            IMapper mapper)
+            IMapper mapper,
+            InnerHttpClient httpClient)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _httpClient = httpClient;
         }
 
         [HttpPost]
@@ -58,8 +62,15 @@ namespace FM.Application.Controllers
             }
 
             await _userManager.DeleteAsync(user);
+            var token = Request.Headers["Authorization"];
+            var deleteFilesResult = await _httpClient.DeleteQuery(user.Id, token);
 
-            return Ok();
+            if ((int)deleteFilesResult.StatusCode >= 400)
+            {
+                return BadRequest(deleteFilesResult.ReasonPhrase);
+            }
+
+            return Ok("Account has been deleted");
         }
 
         [Authorize]

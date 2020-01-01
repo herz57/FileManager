@@ -68,6 +68,12 @@ namespace FM.Common.DataAccess.Interfaces
             var result = _entity.Update(item);
             return result.Entity;
         }
+
+        public virtual Task<long> SumAsync(Expression<Func<TEntity, bool>> selectionExp, 
+            Expression<Func<TEntity, long>> columnExp)
+        {
+            return _entity.Where(selectionExp).SumAsync(columnExp);
+        }
     }
 }
 

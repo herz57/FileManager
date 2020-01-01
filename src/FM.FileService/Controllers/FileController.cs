@@ -77,10 +77,9 @@ namespace FM.FileService.Controllers
         public async Task<IActionResult> AddFileAsync([FromForm(Name = "file")]List<IFormFile> uploadFiles)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userFilesSize = (await _unitOfWork.FilesSizeForUserEntity.GetAsync(f => f.UserId == userId)).FirstOrDefault();
             long size = uploadFiles.Sum(f => f.Length) / 1024;
 
-            if (userFilesSize != null && (userFilesSize.FilesSize + size) > 102400)
+            if ((await _unitOfWork.FileRepository.SumAsync(f => f.UserId == userId, c => c.Size)) > 102400)
             {
                 return BadRequest("Size of files on the disk cannot exceed 100 mb. Please delete some files.");
             }
@@ -96,11 +95,9 @@ namespace FM.FileService.Controllers
 
             await _fileManager.AddFilesToDbAsync(uploadFiles, userId, path);
 
-            await _fileManager.AddUserFilesSizeAsync(userFilesSize, userId, size);
-
             await _unitOfWork.SaveChangesAsync();
 
-            return Ok("Files were uploaded");
+            return Ok("Uploaded");
         }
 
         [Authorize]
@@ -144,10 +141,10 @@ namespace FM.FileService.Controllers
 
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> DeleteFile([FromBody]Guid[] fileIds)
+        public async Task<IActionResult> DeleteFiles([FromBody]Guid[] fileIds)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var filesDeletionResult = await _fileManager.FilesDeletionAsync(fileIds, userId);
+            var filesDeletionResult = await _fileManager.FilesDeletingAsync(fileIds, userId);
 
             if (filesDeletionResult != 0)
             {
@@ -155,6 +152,28 @@ namespace FM.FileService.Controllers
             }
            
             await _unitOfWork.SaveChangesAsync();
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> Collect([FromRoute]string userId)
+        {
+            var _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId != _userId)
+            {
+                return BadRequest("Invalid user id");
+            }
+
+            var files = await _unitOfWork.FileRepository.GetAsync(f => f.UserId == _userId);
+            await _fileManager.DeleteFromDbAsync(files);
+            await _unitOfWork.SaveChangesAsync();
+
+            string directoryPath = string.Format("..{0}FM.FileService{0}Files{0}{1}", Path.DirectorySeparatorChar, _userId);
+
+            Directory.Delete(directoryPath, true);
+
             return Ok();
         }
     }

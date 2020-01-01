@@ -15,7 +15,6 @@ namespace FM.FileService.DataAccess
         private bool disposed;
         private Repository<FileEntity, Guid> _fileRepository;
         private Repository<FileReadHistoryEntity, Guid> _fileReadHistoryRepository;
-        private Repository<FilesSizeForUserEntity, Guid> _filesSizeForUserRepository;
 
         public UnitOfWork(FileDbContext context)
         {
@@ -39,16 +38,6 @@ namespace FM.FileService.DataAccess
                 if (_fileReadHistoryRepository == null)
                     _fileReadHistoryRepository = new Repository<FileReadHistoryEntity, Guid>(_context);
                 return _fileReadHistoryRepository;
-            }
-        }
-
-        public Repository<FilesSizeForUserEntity, Guid> FilesSizeForUserEntity
-        {
-            get
-            {
-                if (_filesSizeForUserRepository == null)
-                    _filesSizeForUserRepository = new Repository<FilesSizeForUserEntity, Guid>(_context);
-                return _filesSizeForUserRepository;
             }
         }
 

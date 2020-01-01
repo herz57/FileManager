@@ -23,6 +23,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using FM.Application.Domain.DTOs;
 using FM.Application.Infrastructure.Validation;
+using FM.Application.Infrastructure;
 
 namespace FM.Application
 {
@@ -54,6 +55,11 @@ namespace FM.Application
             services.AddTransient<IValidator<CreateUserDto>, CreateUserValidator>();
 
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
+
+            services.AddHttpClient<InnerHttpClient>("fileapi", c =>
+            {
+                c.BaseAddress = new Uri(Configuration.GetSection("ExternalApiUrls").GetSection("FileService").GetSection("FileApi").Value);
+            });
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));

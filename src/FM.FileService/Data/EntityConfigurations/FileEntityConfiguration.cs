@@ -14,7 +14,7 @@ namespace FM.FileService.Data.EntityConfigurations
         {
             builder.HasKey(p => p.Id);
             builder.HasAlternateKey(p => p.Name);
-            builder.Property(f => f.Name).HasMaxLength(50).IsRequired();
+            builder.Property(f => f.Name).HasMaxLength(200).IsRequired();
             builder.Property(f => f.AllowedAnonymous).IsRequired();
             builder.Property(d => d.UploadedTime)
                 .HasDefaultValueSql("getdate()");
