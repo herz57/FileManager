@@ -91,9 +91,9 @@ namespace FM.FileService.Services
             }
         }
 
-        public async Task DeleteFromDiscAsync(FileEntity[] files)
+        public Task DeleteFromDiscAsync(FileEntity[] files)
         {
-            Task.Run(() =>
+            return Task.Run(() =>
             {
                 foreach (var file in files)
                 {

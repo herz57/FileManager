@@ -7,6 +7,7 @@ using AutoMapper;
 using FM.Application.Domain.DTOs;
 using FM.Application.Domain.Entities;
 using FM.Application.Infrastructure;
+using FM.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -89,6 +90,32 @@ namespace FM.Application.Controllers
             }
 
             return Ok("Password has been changed");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(forgotPasswordDto.Email);
+                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    return BadRequest("ForgotPasswordConfirmation");
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                EmailService emailService = new EmailService();
+
+                await emailService.SendEmailAsync(forgotPasswordDto.Email, "Reset Password",
+                    $"Для сброса пароля пройдите по ссылке: <a href='url'>link</a>");
+
+                return Ok("An email has been sent to your address, follow the link in it to reset the password");
+                
+            }
+            return BadRequest("ForgotPasswordConfirmation");
         }
     }
 }
