@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-deleteaccount',
@@ -13,7 +13,7 @@ export class DeleteaccountComponent implements OnInit {
   deleteResult: string
 
   constructor(private _userService: UserService,
-              private _router: Router) { }
+              private _authService: AuthService) { }
 
   ngOnInit() {
   }
@@ -22,7 +22,9 @@ export class DeleteaccountComponent implements OnInit {
     this._userService.deleteUser(this.passwordUserData)
     .subscribe((res) => {
       this.deleteResult = res
-      setTimeout(() => this._router.navigate(['/register']), 200)
+      setTimeout(() => {
+        this._authService.logoutUser()
+      }, 1000)
     },
     err => console.log(err))
   }

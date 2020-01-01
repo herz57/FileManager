@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-changepass',
@@ -8,17 +9,23 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ChangepassComponent implements OnInit {
 
-  changePasswordUserData = {
+  changePasswordUserData = { }
+  changePassResult: string;
 
-  }
-
-  constructor(private _userService: UserService) { }
+  constructor(private _userService: UserService,
+              private _authService: AuthService) { }
 
   ngOnInit() {
   }
 
   changePassword() {
     this._userService.changePasswordUser(this.changePasswordUserData)
+    .subscribe((res) => {
+      this.changePassResult = res
+      setTimeout(() => {
+        this._authService.logoutUser()
+      }, 1000)
+    },
+    err => console.log(err))
   }
-
 }

@@ -23,11 +23,7 @@ export class UserService {
   }
 
   changePasswordUser(changePasswordUserData: any) {
-    this._http.put<any>(this.URL, changePasswordUserData)
-    .subscribe(result => {
-      this._auth.logoutUser()
-    }, 
-    err => console.log(err))
+    return this._http.put<any>(this.URL, changePasswordUserData)
   }
 
   deleteUser(passwordUserData: any) {

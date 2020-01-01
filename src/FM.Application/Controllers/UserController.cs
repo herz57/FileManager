@@ -88,7 +88,7 @@ namespace FM.Application.Controllers
                 return BadRequest(result);
             }
 
-            return Ok();
+            return Ok("Password has been changed");
         }
     }
 }

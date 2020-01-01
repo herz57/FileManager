@@ -167,6 +167,12 @@ namespace FM.FileService.Controllers
             }
 
             var files = await _unitOfWork.FileRepository.GetAsync(f => f.UserId == _userId);
+
+            if (files.Length == 0)
+            {
+                return Ok();
+            }
+
             await _fileManager.DeleteFromDbAsync(files);
             await _unitOfWork.SaveChangesAsync();
 
