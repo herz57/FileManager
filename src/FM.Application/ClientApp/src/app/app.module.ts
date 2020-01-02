@@ -18,6 +18,7 @@ import { AccountComponent } from './account/account.component';
 import { ChangepassComponent } from './account/changepass/changepass.component';
 import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.component';
 import { ForgotpasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ForgotpasswordComponent } from './forgot-password/forgot-password.compo
     AccountComponent,
     ChangepassComponent,
     DeleteaccountComponent,
-    ForgotpasswordComponent
+    ForgotpasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

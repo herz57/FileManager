@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ChangepassComponent implements OnInit {
 
   changePasswordUserData = { }
-  changePassResult: string;
+  response: string;
 
   constructor(private _userService: UserService,
               private _authService: AuthService) { }
@@ -21,7 +21,7 @@ export class ChangepassComponent implements OnInit {
   changePassword() {
     this._userService.changePasswordUser(this.changePasswordUserData)
     .subscribe((res) => {
-      this.changePassResult = res
+      this.response = res
       setTimeout(() => {
         this._authService.logoutUser()
       }, 1000)

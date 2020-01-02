@@ -11,6 +11,7 @@ using FM.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace FM.Application.Controllers
 {
@@ -22,14 +23,17 @@ namespace FM.Application.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly InnerHttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
         public UserController(UserManager<User> userManager,
             IMapper mapper,
-            InnerHttpClient httpClient)
+            InnerHttpClient httpClient,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _mapper = mapper;
             _httpClient = httpClient;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -92,15 +96,14 @@ namespace FM.Application.Controllers
             return Ok("Password has been changed");
         }
 
-        [HttpPost]
+        [HttpPost("forgotpass")]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordDto forgotPasswordDto)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(forgotPasswordDto.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                var user = await _userManager.FindByEmailAsync(forgotPasswordDto.Email);
+                if (user == null)
                 {
                     return BadRequest("ForgotPasswordConfirmation");
                 }
@@ -109,13 +112,36 @@ namespace FM.Application.Controllers
 
                 EmailService emailService = new EmailService();
 
+                var clientUrl = string.Format($"{_configuration.GetValue<string>("clientUrl")}/reset-password/{user.Id}?code={code}");
+
                 await emailService.SendEmailAsync(forgotPasswordDto.Email, "Reset Password",
-                    $"Для сброса пароля пройдите по ссылке: <a href='url'>link</a>");
+                    $"To reset your password, follow the link {clientUrl}");
 
                 return Ok("An email has been sent to your address, follow the link in it to reset the password");
                 
             }
             return BadRequest("ForgotPasswordConfirmation");
+        }
+
+        [HttpPost("resetpass")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            var user = await _userManager.FindByIdAsync(resetPasswordDto.Id);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Code, resetPasswordDto.Password);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+
+            return Ok("Password has been reseted");
         }
     }
 }

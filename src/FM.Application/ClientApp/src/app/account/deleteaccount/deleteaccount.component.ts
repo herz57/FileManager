@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class DeleteaccountComponent implements OnInit {
 
   passwordUserData = { }
-  deleteResult: string
+  response: string
 
   constructor(private _userService: UserService,
               private _authService: AuthService) { }
@@ -21,7 +21,7 @@ export class DeleteaccountComponent implements OnInit {
   deleteUser() {
     this._userService.deleteUser(this.passwordUserData)
     .subscribe((res) => {
-      this.deleteResult = res
+      this.response = res
       setTimeout(() => {
         this._authService.logoutUser()
       }, 1000)

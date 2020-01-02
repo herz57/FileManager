@@ -10,6 +10,7 @@ import { AccountComponent } from './account/account.component';
 import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.component';
 import { ChangepassComponent } from './account/changepass/changepass.component';
 import { ForgotpasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const accountChildRoutes: Routes = [
   { path: 'changepass', component: ChangepassComponent},
@@ -54,6 +55,11 @@ const routes: Routes = [
     component: ForgotpasswordComponent,
     canActivate: [IsNotLoggedInGuard]
   },
+  {
+    path: 'reset-password/:id',
+    component: ResetPasswordComponent,
+    canActivate: [IsNotLoggedInGuard]
+  }
 ];
 
 @NgModule({

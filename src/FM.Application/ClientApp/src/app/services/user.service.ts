@@ -29,4 +29,12 @@ export class UserService {
   deleteUser(passwordUserData: any) {
     return this._http.delete<any>(this.URL + passwordUserData.value)
   }
+
+  forgotPasswordUser(user: any) {
+    return this._http.post<any>(this.URL + 'forgotpass', user)
+  }
+
+  resetPasswordUser(passwordsWithCode: any) {
+    return this._http.post<any>(this.URL + 'resetpass', passwordsWithCode)
+  }
 }

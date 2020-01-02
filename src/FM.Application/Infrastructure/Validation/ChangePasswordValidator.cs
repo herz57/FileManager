@@ -20,7 +20,7 @@ namespace FM.Application.Infrastructure.Validation
 
             RuleFor(p => p.NewPassword)
                 .Matches(@"^(?=.*[a-z])(?=.*[A-Z])")
-                .WithMessage("Pawssword must has at least one lowercase and one uppercase letter")
+                .WithMessage("Password must has at least one lowercase and one uppercase letter")
                 .Matches(@"^(?=.*\d)")
                 .WithMessage("Pawssword must has at least one number")
                 .Matches(@"^(?=.*[@$!#%*?&])[A-Za-z\d@$!#%*?&]")
@@ -29,7 +29,7 @@ namespace FM.Application.Infrastructure.Validation
                 .WithMessage("Password must has minimum 8 and maximum 20 characters");
 
             RuleFor(p => p.NewPassword)
-                .Equal(p => p.ConfirmPassword)
+                .Equal(p => p.PasswordConfirm)
                 .WithMessage("Passwords don`t match");
         }
     }
