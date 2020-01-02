@@ -143,6 +143,11 @@ namespace FM.FileService.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteFiles([FromBody]Guid[] fileIds)
         {
+            if (fileIds == null)
+            {
+                return BadRequest();
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var filesDeletionResult = await _fileManager.FilesDeletingAsync(fileIds, userId);
 

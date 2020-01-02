@@ -11,6 +11,9 @@ namespace FM.FileService.Infrastructure.Validation
     {
         public FormFileValidator()
         {
+            RuleFor(f => f)
+                .NotNull();
+
             RuleFor(f => f.FileName)
                 .NotEmpty()
                 .Length(1, 100)
@@ -22,6 +25,9 @@ namespace FM.FileService.Infrastructure.Validation
     {
         public FormFileListValidator()
         {
+            RuleFor(f => f)
+                .NotNull();
+
             RuleForEach(f => f)
                 .SetValidator(new FormFileValidator());
         }
