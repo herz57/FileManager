@@ -77,9 +77,9 @@ namespace FM.FileService.Controllers
         public async Task<IActionResult> AddFileAsync([FromForm(Name = "file")]List<IFormFile> uploadFiles)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            long size = uploadFiles.Sum(f => f.Length) / 1024;
+            long size = uploadFiles.Sum(f => f.Length);
 
-            if ((await _unitOfWork.FileRepository.SumAsync(f => f.UserId == userId, c => c.Size)) > 102400)
+            if ((await _unitOfWork.FileRepository.SumAsync(f => f.UserId == userId, c => c.Size)) > 102400000)
             {
                 return BadRequest("Size of files on the disk cannot exceed 100 mb. Please delete some files.");
             }

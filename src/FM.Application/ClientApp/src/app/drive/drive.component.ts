@@ -65,14 +65,13 @@ export class DriveComponent implements OnInit {
     });
   }
 
-  convertUnixToUtc(unixTime: number) {
-    let date = new Date(unixTime * 1000)
-    let pipe = new DatePipe('en-US')
-    let formattedDate = pipe.transform(date, 'HH:MM:SS yyyy/MM/dd');
-    return formattedDate
-  }
-
   formatFileSize(size) {
-    return size <= 1000 ? size + ' KB' : (size / 1000).toFixed(2) + ' MB'
+    if (size < 1024) {
+      return size + ' B';
+    }
+    else if (size >= 1024 && size < 1024000) {
+      return (size / 1000).toFixed(2) + ' KB'
+    }
+    return (size / 1000000).toFixed(2) + ' MB'
   }
 }

@@ -2,7 +2,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <td>N</td>
+            <td>#</td>
             <td>Id</td>
             <td>Name</td>
             <td>Size</td>
@@ -25,7 +25,7 @@
     <td>{{file.id}}</td>
     <td>{{file.name}}</td>
     <td>{{formatFileSize(file.size)}}</td>
-    <td>{{convertUnixToUtc(file.uploadedTime)}}</td>
+    <td>{{file.uploadedTime * 1000 - 7200000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
     <td>{{file.allowedAnonymous ? 'Yes' : 'No'}}</td>
     <td>
         <input type="button" value="Edit" class="btn btn-default" (click)="editFile(file)" />

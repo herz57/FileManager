@@ -12,7 +12,7 @@ namespace FM.FileService.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
                     Path = table.Column<string>(nullable: true),
                     UploadedTime = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()"),
                     UserId = table.Column<string>(nullable: true),
@@ -22,7 +22,6 @@ namespace FM.FileService.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Files", x => x.Id);
-                    table.UniqueConstraint("AK_Files_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(

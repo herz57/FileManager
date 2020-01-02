@@ -13,7 +13,6 @@ namespace FM.FileService.Data.EntityConfigurations
         public void Configure(EntityTypeBuilder<FileEntity> builder)
         {
             builder.HasKey(p => p.Id);
-            builder.HasAlternateKey(p => p.Name);
             builder.Property(f => f.Name).HasMaxLength(200).IsRequired();
             builder.Property(f => f.AllowedAnonymous).IsRequired();
             builder.Property(d => d.UploadedTime)

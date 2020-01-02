@@ -84,7 +84,7 @@ namespace FM.FileService.Services
                     Name = fileToRecord.FileName,
                     Path = string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, fileToRecord.FileName),
                     UserId = userId,
-                    Size = fileToRecord.Length / 1024
+                    Size = fileToRecord.Length
                 };
 
                 await _unitOfWork.FileRepository.CreateAsync(file);
