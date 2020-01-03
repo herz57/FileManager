@@ -68,8 +68,7 @@ export class DriveComponent implements OnInit {
   formatFileSize(size) {
     if (size < 1024) {
       return size + ' B';
-    }
-    else if (size >= 1024 && size < 1024000) {
+    } else if (size >= 1024 && size < 1024000) {
       return (size / 1000).toFixed(2) + ' KB'
     }
     return (size / 1000000).toFixed(2) + ' MB'

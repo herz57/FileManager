@@ -19,6 +19,7 @@ import { ChangepassComponent } from './account/changepass/changepass.component';
 import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.component';
 import { ForgotpasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { FiltersComponent } from './drive/filters/filters.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ChangepassComponent,
     DeleteaccountComponent,
     ForgotpasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    FiltersComponent
   ],
   imports: [
     BrowserModule,
