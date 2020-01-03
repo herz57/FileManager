@@ -170,26 +170,26 @@ namespace FM.FileService.Services
             }
 
             FileFilterSpecification<FileEntity> fileFilterSpecification = new FileFilterSpecification<FileEntity>(criterias, 
-            fileFilterDto.ItemsPage * fileFilterDto.PageIndex, 
+            fileFilterDto.ItemsPage * (fileFilterDto.PageIndex - 1), 
             fileFilterDto.ItemsPage);
 
             if (fileFilterDto.SortingColumn != null)
             {
                 switch (fileFilterDto.SortingColumn)
                 {
-                    case "Id":
+                    case nameof(FileEntity.Id):
                         sortingColumnExp = f => f.Id;
                         break;
-                    case "Name":
+                    case nameof(FileEntity.Name):
                         sortingColumnExp = f => f.Name;
                         break;
-                    case "UploadedTime":
+                    case nameof(FileEntity.UploadedTime):
                         sortingColumnExp = f => f.UploadedTime;
                         break;
-                    case "Size":
+                    case nameof(FileEntity.Size):
                         sortingColumnExp = f => f.Size;
                         break;
-                    case "AllowedAnonymous":
+                    case nameof(FileEntity.AllowedAnonymous):
                         sortingColumnExp = f => f.AllowedAnonymous;
                         break;
                 }

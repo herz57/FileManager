@@ -1,3 +1,18 @@
 .heading {
     float: left;
 }
+
+.table-striped tbody tr {
+    background: rgb(48, 48, 48);
+    color: rgb(223, 223, 223);
+}
+
+.files-top-row {
+    color: rgb(74, 107, 255);
+    cursor: pointer;
+    font-weight: 800;
+
+    &:hover {
+        color: rgb(255, 52, 52);
+    }
+}

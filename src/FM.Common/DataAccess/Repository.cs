@@ -74,6 +74,11 @@ namespace FM.Common.DataAccess.Interfaces
         {
             return _entity.Where(selectionExp).SumAsync(columnExp);
         }
+
+        public virtual Task<int> CountAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return _entity.CountAsync(expression);
+        }
     }
 }
 

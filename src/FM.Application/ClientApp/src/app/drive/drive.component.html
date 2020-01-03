@@ -4,15 +4,15 @@
     <thead>
         <tr>
             <td>#</td>
-            <td>Id</td>
-            <td>Name</td>
-            <td>Size</td>
-            <td>UploadedTime</td>
-            <td>AllowedAnonymous</td>
+            <td class="files-top-row" (click)="sort('Id')" ><span></span>Id</td>
+            <td class="files-top-row" (click)="sort('Name')"><span></span>Name</td>
+            <td class="files-top-row" (click)="sort('Size')"><span></span>Size</td>
+            <td class="files-top-row" (click)="sort('UploadedTime')"><span></span>UploadedTime</td>
+            <td class="files-top-row" (click)="sort('AllowedAnoymous')"><span></span>AllowedAnonymous</td>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let file of files">
+        <tr *ngFor="let file of files | paginate: { itemsPerPage: 10, currentPage: page }">
             <ng-template [ngTemplateOutlet]="loadTemplate(file)" 
                         [ngTemplateOutletContext]="{ $implicit: file}">
             </ng-template>
@@ -60,3 +60,4 @@
         <input type="button" value="Cancel" (click)="cancel()" class="btn btn-warning" />
     </td>
 </ng-template>
+<pagination-controls (pageChange)="options.pageIndex = $event" (pageChange)="loadFiles()"></pagination-controls>

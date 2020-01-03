@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FileService } from '../services/file.service';
 import { FileModel } from './fileModel';
-import { DatePipe } from '@angular/common';
+import { FilesResponse } from './FIlesResponse';
 
 @Component({
   selector: 'app-drive',
@@ -15,17 +15,22 @@ export class DriveComponent implements OnInit {
   @ViewChild('editTemplate', {static: false}) editTemplate: TemplateRef<any>;
 
   filesUrl = "http://localhost:5000/api/file/files";
-  response: any;
-  editedFile: FileModel;
-  files: Array<FileModel>;
-  statusMessage: string;
+  response: any
+  editedFile: FileModel
+  files: Array<FileModel>
+  statusMessage: string
   options = {
-
+    pageIndex: 1,
+    itemsPage: 10
+  }
+  page: number = 1
+  topRoWSpan = {
+    Name: ""
   }
 
   constructor(private http: HttpClient,
               private _fileService: FileService) {
-    this.files = new Array<FileModel>();
+        this.files = new Array<FileModel>();
    }
 
   ngOnInit() {
@@ -33,8 +38,18 @@ export class DriveComponent implements OnInit {
   }
 
   private loadFiles() {
-    this._fileService.getFiles(this.options).subscribe((res: FileModel[]) => {
-      this.files = res; 
+    this._fileService.getFiles(this.options).subscribe((res: FilesResponse) => {
+      if (res.userFilesLength > 0) {
+        this.files = res.files;
+        this.files.length = res.userFilesLength
+        this.page = this.options.pageIndex
+      } else {
+        for (let i = 0, j = 0; i < this.files.length; i++) {
+          if (this.files[i] == undefined)
+            this.files[i] = res.files[j++]
+        }
+        this.page = this.options.pageIndex
+      }
     });
   }
 
@@ -72,5 +87,9 @@ export class DriveComponent implements OnInit {
       return (size / 1000).toFixed(2) + ' KB'
     }
     return (size / 1000000).toFixed(2) + ' MB'
+  }
+
+  sort(column) {
+    console.log(column)
   }
 }

@@ -35,11 +35,23 @@ namespace FM.FileService.Controllers
 
         [Authorize]
         [HttpPost("{files}")]
-        public async Task<ActionResult<FileDto[]>> GetFilesAsync([FromBody]FileFilterDto fileFilterDto)
+        public async Task<ActionResult<FilesResponseDto>> GetFilesAsync([FromBody]FileFilterDto fileFilterDto)
         {
-            var result = await _fileManager.GetFilesAsync(fileFilterDto, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _fileManager.GetFilesAsync(fileFilterDto, userId);
             var mappedFiles = _mapper.Map<FileDto[]>(result);
-            return mappedFiles;
+            FilesResponseDto filesResponse = new FilesResponseDto
+            {
+                Files = mappedFiles
+            };
+
+            if (fileFilterDto.PageIndex == 1)
+            {
+                int filesCount = await _unitOfWork.FileRepository.CountAsync(f => f.UserId == userId);
+                filesResponse.UserFilesLength = filesCount;
+            }
+
+            return filesResponse;
         }
 
         [HttpGet("{fileId}")]
