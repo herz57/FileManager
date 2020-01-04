@@ -11,7 +11,7 @@ namespace FM.FileService.Filters
         public FileFilters Filters { get; set; }
         public FileSortingMode SortingMode { get; set; }
         public string SortingColumn { get; set; }
-        public int PageIndex { get; set; } = 0;
+        public int PageIndex { get; set; } = 1;
         public int ItemsPage { get; set; } = 10;
     }
 }

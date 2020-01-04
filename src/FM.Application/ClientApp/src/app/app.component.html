@@ -1,28 +1,34 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
-  <a class="navbar-brand" href="#">FileDrive</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" *ngIf="_authService.loggedIn()" routerLink="/account" routerLinkActive="active">Account</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" *ngIf="_authService.loggedIn()" routerLink="/upload-files" routerLinkActive="active">Upload Files</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" *ngIf="_authService.loggedIn()" routerLink="/drive" routerLinkActive="active">Drive</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav">
-        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/login" routerLinkActive="active">Sign In</a>
-        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/register" routerLinkActive="active">Sign Up</a>
-        <a class="nav-link" style="cursor:pointer" *ngIf="_authService.loggedIn()" (click)="_authService.logoutUser()">Logout</a>        
-    </ul>
+<div class="content">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand" href="#">FileDrive</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="_authService.loggedIn()" routerLink="/account" routerLinkActive="active">Account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="_authService.loggedIn()" routerLink="/upload-files" routerLinkActive="active">Upload Files</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="_authService.loggedIn()" routerLink="/drive" routerLinkActive="active">Drive</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+            <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/login" routerLinkActive="active">Sign In</a>
+            <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/register" routerLinkActive="active">Sign Up</a>
+            <a class="nav-link" style="cursor:pointer" *ngIf="_authService.loggedIn()" (click)="_authService.logoutUser()">Logout</a>        
+        </ul>
+      </div>
+    </nav>    
+    <div class="container">
+      <router-outlet></router-outlet>         
+    </div>
   </div>
-</nav>    
-<div class="container">
-  <router-outlet></router-outlet>         
-</div>
+  <footer class="page-footer font-small blue">
+    <div class="footer-copyright text-center py-3">© {{year}} Copyright
+      <a routerLink="/drive"> FileDrive</a>
+    </div>
+  </footer>

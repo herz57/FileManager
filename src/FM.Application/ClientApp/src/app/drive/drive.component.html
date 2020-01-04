@@ -1,14 +1,55 @@
-<app-filters></app-filters>
-<h2 class="heading">File List</h2>
+
+<div class="form-group row">
+    <table class="table">
+        <thead>
+        <tr>
+            <th><label for="Id">Id</label></th>
+            <th><label for="Name">Name</label></th>
+            <th><label>Size (KB)</label></th>
+            <th><label>Uploaded time</label></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="filters_row" (change)="applyFilters()">
+            <td><input class="form-control" id="Id" [(ngModel)]="filtersModel.filters.id" type="text" placeholder="Id"></td>
+            <td><input class="form-control" id="Name" [(ngModel)]="filtersModel.filters.name" type="text" placeholder="Name"></td>
+            <td><input class="form-control min" id="MinSize" [(ngModel)]="filters.size[0]" type="number" placeholder="Min">
+                <input class="form-control" id="MaxSize" [(ngModel)]="filters.size[1]" type="number" placeholder="Max">
+            </td>
+            <td>
+                <input type="date" id="datamin" [(ngModel)]="filters.uploadTime[0]">
+                <input type="date" id="datamax" [(ngModel)]="filters.uploadTime[1]">
+            </td>
+            <td><div class="dropdown">
+                <button class="btn gray-btn dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Allowed anonymous
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                  <button class="dropdown-item" type="button" (click)="allowedAnonymousSelect(null)">All</button>
+                  <button class="dropdown-item" type="button" (click)="allowedAnonymousSelect(true)">Yes</button>
+                  <button class="dropdown-item" type="button" (click)="allowedAnonymousSelect(false)">No</button>
+                </div>
+              </div>
+            </td>
+            <td>
+                <button class="btn blue-btn" type="submit" (click)="clearFilters()">Clear</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
 <table class="table table-striped">
     <thead>
         <tr>
             <td>#</td>
-            <td class="files-top-row" (click)="sort('Id')" ><span></span>Id</td>
-            <td class="files-top-row" (click)="sort('Name')"><span></span>Name</td>
-            <td class="files-top-row" (click)="sort('Size')"><span></span>Size</td>
-            <td class="files-top-row" (click)="sort('UploadedTime')"><span></span>UploadedTime</td>
-            <td class="files-top-row" (click)="sort('AllowedAnoymous')"><span></span>AllowedAnonymous</td>
+            <td class="files-top-row" (click)="sort('Id', 0)" ><span class="arrow" [innerHTML]='sortSymbol[0]'></span> Id</td>
+            <td class="files-top-row" (click)="sort('Name', 1)"><span class="arrow" [innerHTML]='sortSymbol[1]'></span> Name</td>
+            <td class="files-top-row" (click)="sort('Size', 2)"><span class="arrow" [innerHTML]='sortSymbol[2]'></span> Size</td>
+            <td class="files-top-row" (click)="sort('UploadedTime', 3)"><span class="arrow" [innerHTML]='sortSymbol[3]'></span> UploadedTime</td>
+            <td class="files-top-row" (click)="sort('AllowedAnonymous', 4)"><span class="arrow" [innerHTML]='sortSymbol[4]'></span> AllowedAnonymous</td>
         </tr>
     </thead>
     <tbody>
@@ -29,10 +70,10 @@
     <td>{{file.uploadedTime * 1000 - 7200000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
     <td>{{file.allowedAnonymous ? 'Yes' : 'No'}}</td>
     <td>
-        <input type="button" value="Edit" class="btn btn-default" (click)="editFile(file)" />
+        <input type="button" value="Edit" class="btn list-btn btn-default" (click)="editFile(file)" />
     </td>
     <td>
-        <input type="button" value="Delete" (click)="deleteFiles(file)" class="btn btn-danger" />
+        <input type="button" value="Delete" (click)="deleteFiles(file)" class="btn list-btn btn-danger" />
     </td>
 </ng-template>
    
@@ -60,4 +101,4 @@
         <input type="button" value="Cancel" (click)="cancel()" class="btn btn-warning" />
     </td>
 </ng-template>
-<pagination-controls (pageChange)="options.pageIndex = $event" (pageChange)="loadFiles()"></pagination-controls>
+<pagination-controls (pageChange)="filtersModel.pageIndex = $event" (pageChange)="loadFiles()"></pagination-controls>

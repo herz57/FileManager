@@ -47,7 +47,7 @@ namespace FM.FileService.Controllers
 
             if (fileFilterDto.PageIndex == 1)
             {
-                int filesCount = await _unitOfWork.FileRepository.CountAsync(f => f.UserId == userId);
+                int filesCount = await _fileManager.GetFilesCount(fileFilterDto, userId);
                 filesResponse.UserFilesLength = filesCount;
             }
 

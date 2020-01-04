@@ -2,3 +2,18 @@
     background: rgb(44, 44, 44);
     padding: 30px;
 }
+
+footer {
+    width: 100%;
+    background: rgb(0, 0, 0);
+    color: #fff;
+    font-size: 10pt;
+}
+
+.content {
+    flex: 1 0 auto;
+}
+
+footer {
+	flex: 0 0 auto;
+}

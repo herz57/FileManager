@@ -7,6 +7,9 @@ import { AuthService } from "./services/auth.service"
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(private _authService: AuthService){}
+
+  year: number = new Date().getFullYear()
+
+  constructor(private _authService: AuthService) { }
   title = 'ClientApp';
 }

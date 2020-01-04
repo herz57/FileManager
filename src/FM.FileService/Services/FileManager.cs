@@ -26,6 +26,7 @@ namespace FM.FileService.Services
         private IWebHostEnvironment _appEnvironment;
         private readonly FileDbContext _context;
         private readonly UnitOfWork _unitOfWork;
+        private FileFilterSpecification<FileEntity> _fileFilterSpecification;
 
         public FileManager(IWebHostEnvironment appEnvironment, 
             FileDbContext context,
@@ -140,7 +141,14 @@ namespace FM.FileService.Services
             
         public async Task<IReadOnlyList<FileEntity>> GetFilesAsync(FileFilterDto fileFilterDto, string userId)
         {
-            Expression<Func<FileEntity, object>> sortingColumnExp = null;
+            SetFilters(fileFilterDto, userId);
+            SetSorting(fileFilterDto);
+            var result = await ApplySpecification(_fileFilterSpecification).ToArrayAsync();
+            return result;
+        }
+
+        public void SetFilters(FileFilterDto fileFilterDto, string userId)
+        {
             Expression<Func<FileEntity, bool>> criterias = f => f.UserId == userId;
 
             if (fileFilterDto.Filters != null)
@@ -155,7 +163,7 @@ namespace FM.FileService.Services
                 }
                 if (fileFilterDto.Filters.Size != null)
                 {
-                    criterias = criterias.AndAlso(f => f.Size >= fileFilterDto.Filters.Size[0] 
+                    criterias = criterias.AndAlso(f => f.Size >= fileFilterDto.Filters.Size[0]
                         && f.Size <= fileFilterDto.Filters.Size[1]);
                 }
                 if (fileFilterDto.Filters.UploadTime != null)
@@ -169,9 +177,14 @@ namespace FM.FileService.Services
                 }
             }
 
-            FileFilterSpecification<FileEntity> fileFilterSpecification = new FileFilterSpecification<FileEntity>(criterias, 
-            fileFilterDto.ItemsPage * (fileFilterDto.PageIndex - 1), 
+            _fileFilterSpecification = new FileFilterSpecification<FileEntity>(criterias,
+            fileFilterDto.ItemsPage * (fileFilterDto.PageIndex - 1),
             fileFilterDto.ItemsPage);
+        }
+
+        public void SetSorting(FileFilterDto fileFilterDto)
+        {
+            Expression<Func<FileEntity, object>> sortingColumnExp = null;
 
             if (fileFilterDto.SortingColumn != null)
             {
@@ -197,15 +210,18 @@ namespace FM.FileService.Services
 
             if (fileFilterDto.SortingMode == FileSortingMode.OrderBy)
             {
-                fileFilterSpecification.ApplyOrderBy(sortingColumnExp);
+                _fileFilterSpecification.ApplyOrderBy(sortingColumnExp);
             }
             else if (fileFilterDto.SortingMode == FileSortingMode.OrderByDescending)
             {
-                fileFilterSpecification.ApplyOrderByDescending(sortingColumnExp);
+                _fileFilterSpecification.ApplyOrderByDescending(sortingColumnExp);
             }
+        }
 
-            var result = await ApplySpecification(fileFilterSpecification).ToArrayAsync();
-            return result;
+        public Task<int> GetFilesCount(FileFilterDto fileFilterDto, string userId)
+        {
+            SetFilters(fileFilterDto, userId);
+            return _unitOfWork.FileRepository.CountAsync(_fileFilterSpecification.Criteria);
         }
 
         public async Task<IReadOnlyList<FileReadHistoryEntity>> GetFileHistoriesAsync(Guid fileId, 

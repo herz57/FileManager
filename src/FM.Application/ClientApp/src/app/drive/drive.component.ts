@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FileService } from '../services/file.service';
-import { FileModel } from './fileModel';
-import { FilesResponse } from './FIlesResponse';
+import { FileModel } from './Models/fileModel';
+import { FilesResponseModel } from './Models/filesResponseModel';
+import { FileFilterModel } from './Models/fileFilterModel';
+import { FileFiltes } from './Models/fileFilters';
 
 @Component({
   selector: 'app-drive',
@@ -19,18 +21,25 @@ export class DriveComponent implements OnInit {
   editedFile: FileModel
   files: Array<FileModel>
   statusMessage: string
-  options = {
-    pageIndex: 1,
-    itemsPage: 10
-  }
   page: number = 1
-  topRoWSpan = {
-    Name: ""
+  sortSymbol = new Array<string>(5)
+  controlSort: number = 0
+  filters = {
+    size: new Array<number>(2),
+    uploadTime: new Array<Date>(2)
   }
+  validateMessage: string
+
 
   constructor(private http: HttpClient,
-              private _fileService: FileService) {
+              private _fileService: FileService,
+              private filtersModel: FileFilterModel) {
         this.files = new Array<FileModel>();
+        this.sortSymbol[0] = '&uarr;'
+        filtersModel.sortingMode = 1
+        filtersModel.sortingColumn = 'Id'
+        filtersModel.pageIndex = 1
+        this.filtersModel.filters = new FileFiltes()
    }
 
   ngOnInit() {
@@ -38,19 +47,23 @@ export class DriveComponent implements OnInit {
   }
 
   private loadFiles() {
-    this._fileService.getFiles(this.options).subscribe((res: FilesResponse) => {
-      if (res.userFilesLength > 0) {
-        this.files = res.files;
-        this.files.length = res.userFilesLength
-        this.page = this.options.pageIndex
-      } else {
-        for (let i = 0, j = 0; i < this.files.length; i++) {
-          if (this.files[i] == undefined)
-            this.files[i] = res.files[j++]
-        }
-        this.page = this.options.pageIndex
-      }
+    this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
+      this.paginationResponseHandler(res)
     });
+  }
+
+  paginationResponseHandler(response) {
+    if (response.userFilesLength > 0) {
+      this.files = response.files;
+      this.files.length = response.userFilesLength
+      this.page = this.filtersModel.pageIndex
+    } else {
+      for (let i = 0, j = 0; i < this.files.length; i++) {
+        if (this.files[i] == undefined)
+          this.files[i] = response.files[j++]
+      }
+      this.page = this.filtersModel.pageIndex
+    }
   }
 
   editFile(file: FileModel) {
@@ -89,7 +102,67 @@ export class DriveComponent implements OnInit {
     return (size / 1000000).toFixed(2) + ' MB'
   }
 
-  sort(column) {
-    console.log(column)
+  sort(column, index: number) {
+    if (this.controlSort != index) {
+      this.filtersModel.sortingMode = 1
+    } else {
+      this.filtersModel.sortingMode = this.filtersModel.sortingMode < 2 ? ++this.filtersModel.sortingMode : 0
+    }
+    this.filtersModel.sortingColumn = column
+    this.loadFiles()
+    this.changeSortArrow(index)
+  }
+
+  changeSortArrow(index: number) {
+    for (let i = 0; i < this.sortSymbol.length; i++) {
+      this.sortSymbol[i] = ''
+    }
+    if (this.filtersModel.sortingMode == 1) {
+      this.sortSymbol[index] = '&uarr;'
+    } else if (this.filtersModel.sortingMode == 2) {
+      this.sortSymbol[index] = '&darr;'
+    }
+    this.controlSort = index
+  }
+
+  allowedAnonymousSelect(value) {
+    this.filtersModel.filters.allowedAnonymous = value
+    this.applyFilters()
+  }
+
+  clearFilters() {
+    this.filtersModel = new FileFilterModel()
+    this.filtersModel.filters = new FileFiltes()
+    this.loadFiles()
+  }
+
+  filtersValidate(): boolean {
+    return true
+  }
+
+  applyFilters() {
+    if (!this.filtersValidate())
+      return
+
+    this.filtersModel.pageIndex = 1
+    this.filtersModel.filters.uploadTime = new Array<number>(2)
+    this.filtersModel.filters.uploadTime[0] = new Date(this.filters.uploadTime[0]).getTime() / 1000
+    this.filtersModel.filters.uploadTime[1] = new Date(this.filters.uploadTime[1]).getTime() / 1000
+
+    this.filtersModel.filters.size = new Array<number>(2)
+    this.filtersModel.filters.size[0] = this.filters.size[0] * 1024
+    this.filtersModel.filters.size[1] = this.filters.size[1] * 1024
+
+    this.filtersModel.filters.name = this.filtersModel.filters.name ? 
+      this.filtersModel.filters.name : null
+
+    this.filtersModel.filters.id = this.filtersModel.filters.id ? 
+      this.filtersModel.filters.id : null
+
+    this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
+      this.files = res.files;
+      this.files.length = res.userFilesLength
+      this.page = 1
+    })
   }
 }
