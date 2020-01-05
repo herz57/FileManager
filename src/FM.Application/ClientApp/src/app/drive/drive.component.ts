@@ -147,9 +147,21 @@ export class DriveComponent implements OnInit {
     if (!!this.filters.size[0] != !!this.filters.size[1]) {
       return false
     }
-    if (!new RegExp('^([a-zA-Z0-9-]){30,50}$').test(this.filtersModel.filters.id)) {
+    if (this.filters.size[0] < 0.001 || this.filters.size[0] > 51200 
+      || this.filters.size[1] < 0.001 || this.filters.size[0] > 51200) {
+        this.validateMessage = "min size = 0.001 max size = 51200"
       return false
     }
+    if (this.filtersModel.filters.id && !new RegExp('^([a-zA-Z0-9-]){30,50}$').test(this.filtersModel.filters.id)) {
+      this.validateMessage = "Invalid id"
+      return false
+    }
+    if (this.filtersModel.filters.name && (this.filtersModel.filters.name.length > 100 
+      || this.filtersModel.filters.name.indexOf(".") == -1)) {
+      this.validateMessage = "Invalid name"
+      return false
+    }
+    this.validateMessage = ""
     return true
   }
 

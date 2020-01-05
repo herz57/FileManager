@@ -130,6 +130,13 @@ table td, .table th {
         .top-headers-row {
             border-bottom: 1px solid rgb(173, 173, 173);
             padding: 0;
+
+            .validate-message {
+                position: absolute;
+                color: rgb(252, 36, 80);
+                margin-left: 120px;
+                font-weight: 500;
+            }
         }
     }
 }

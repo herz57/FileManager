@@ -50,7 +50,7 @@ namespace FM.FileService.Infrastructure.Validation
                     .When(p => p.Name != null)
                     .WithMessage("Name must has minimum 1 and maximum 30 characters");
 
-                RuleForEach(p => p.Size).LessThanOrEqualTo(20971520);
+                RuleForEach(p => p.Size).LessThanOrEqualTo(52428800);
 
                 RuleForEach(p => p.UploadTime).LessThanOrEqualTo(5000000000);
             }
