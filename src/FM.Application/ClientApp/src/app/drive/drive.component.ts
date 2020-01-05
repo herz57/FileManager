@@ -5,6 +5,7 @@ import { FileModel } from './Models/fileModel';
 import { FilesResponseModel } from './Models/filesResponseModel';
 import { FileFilterModel } from './Models/fileFilterModel';
 import { FileFiltes } from './Models/fileFilters';
+import { saveAs } from "file-saver";
 
 @Component({
   selector: 'app-drive',
@@ -29,6 +30,7 @@ export class DriveComponent implements OnInit {
     uploadTime: new Array<Date>(2)
   }
   validateMessage: string
+  isNewRecord: boolean
 
 
   constructor(private http: HttpClient,
@@ -46,7 +48,7 @@ export class DriveComponent implements OnInit {
     this.loadFiles();
   }
 
-  private loadFiles() {
+  private loadFiles() {console.log(this.filtersModel.pageIndex)
     this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
       this.paginationResponseHandler(res)
     });
@@ -86,11 +88,40 @@ export class DriveComponent implements OnInit {
     this.editedFile = null;
   }
 
+  downloadFile(file) {
+    this._fileService.downloadFile(file.id).subscribe(
+      data => {
+        saveAs(data, file.name);
+      },
+      err => {
+        alert("Problem while downloading the file.");
+        console.error(err);
+      }
+    );
+  }
+
   deleteFiles(file: FileModel) {
-    this._fileService.deleteFiles(file.id).subscribe(() => {
+    let fileIds: string[] = [file.id]
+    this._fileService.deleteFiles(fileIds).subscribe(() => {
         this.statusMessage = 'Deleted',
-        this.loadFiles();
-    });
+
+        this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
+          this.files = res.files
+          console.log(this.files)
+        })
+    })
+  }
+
+  cancel() {
+    if (this.isNewRecord) {
+        this.files.pop();
+        this.isNewRecord = false;
+    }
+    this.editedFile = null;
+  }
+
+  shareFile(event) {
+    console.log(event)
   }
 
   formatFileSize(size) {

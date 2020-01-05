@@ -7,7 +7,7 @@
             <th><label for="Name">Name</label></th>
             <th><label>Size (KB)</label></th>
             <th><label>Uploaded time</label></th>
-            <th class="validate-message">{{validateMessage}}</th>
+            <th></th>
             <th></th>
         </tr>
         </thead>
@@ -75,24 +75,23 @@
     <td>
         <input type="button" value="Delete" (click)="deleteFiles(file)" class="btn list-btn btn-danger" />
     </td>
+    <td>
+        <input type="button" value="Share" (click)="shareFile(file)" [disabled]="!file.allowedAnonymous" class="btn list-btn btn-blue" />
+    </td>
+    <td>
+        <input type="button" value="Download" (click)="downloadFile(file)" class="btn list-btn btn-success" />
+    </td>
 </ng-template>
    
 
 <ng-template #editTemplate>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
     <td>
-        <input type="text" [(ngModel)]="editedFile.id" readonly disabled class="form-control" />
-    </td>
-    <td>
-        <input type="text" [(ngModel)]="editedFile.name" readonly disabled class="form-control" />
-    </td>
-    <td>
-        <input type="text" [(ngModel)]="editedFile.size" readonly disabled class="form-control" />
-    </td>
-    <td>
-        <input type="text" [(ngModel)]="editedFile.uploadedtime" readonly disabled class="form-control" />
-    </td>
-    <td>
-        <input type="checkbox" [(ngModel)]="editedFile.allowedanonymous" class="form-control" />
+        <input type="checkbox" [(ngModel)]="editedFile.allowedanonymous" class="form-control radio-allowed" />
     </td>
     <td>
         <input type="button" value="Save" (click)="saveFile()" class="btn btn-success" />

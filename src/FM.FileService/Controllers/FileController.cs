@@ -113,11 +113,11 @@ namespace FM.FileService.Controllers
         }
 
         [Authorize]
-        [HttpPatch("{fileId}")]
-        public async Task<IActionResult> PatchFile([FromBody]JsonPatchDocument<UpdateFileDto> filePatch,
+        [HttpPut]
+        public async Task<IActionResult> UpdateFile([FromBody]UpdateFileDto fileDto,
             [FromRoute]Guid fileId)
         {
-            var file = await _unitOfWork.FileRepository.FindAsync(fileId);
+            var file = await _unitOfWork.FileRepository.FindAsync(fileDto.Id);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (file == null)
@@ -130,18 +130,7 @@ namespace FM.FileService.Controllers
                 return StatusCode(403);
             }
 
-            var fileDto = _mapper.Map<UpdateFileDto>(file);
-
-            filePatch.ApplyTo(fileDto);
-
-            TryValidateModel(fileDto);
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _mapper.Map(fileDto, file);
+            file.AllowedAnonymous = fileDto.AllowedAnonymous;
 
             _unitOfWork.FileRepository.Update(file);
             await _unitOfWork.SaveChangesAsync();

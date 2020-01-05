@@ -5,6 +5,13 @@
     font-size: 9pt;
 }
 
+.table-striped tbody tr:hover {
+    color: #5c66f5;
+    cursor: pointer;
+}
+
+.table-striped tbody tr:nth-child(even) {background-color: #3a3a3a;}
+
 .files-top-row {
     color: rgb(74, 107, 255);
     cursor: pointer;
@@ -36,10 +43,11 @@ table td, .table th {
     margin-top: -7px;
 }
 
-
+.radio-allowed {
+    margin-top: 5px;
+}
 
 .form-group {
-    margin-top: 30px; 
     margin-bottom: 0;
 
     .form-control {
@@ -52,17 +60,6 @@ table td, .table th {
 
     .min {
         margin-bottom: 5px;
-    }
-
-    .btn {
-        color: #fff;
-
-        padding-left: 12px;
-        padding-right: 12px;
-        font-size: 10pt;
-        margin-right: 10px;
-
-        
     }
 
     .gray-btn {
@@ -128,7 +125,6 @@ table td, .table th {
         }
 
         .top-headers-row {
-            border-bottom: 1px solid rgb(173, 173, 173);
             padding: 0;
 
             .validate-message {
@@ -141,4 +137,30 @@ table td, .table th {
     }
 }
 
+.btn {
+    color: #fff;
+    padding: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 10pt;
+    margin-right: 10px;
+}
+
+.btn-blue {
+    background: rgb(52, 123, 255);
+    color: #fff;
+
+    &:hover {
+        background: rgb(36, 105, 231);
+    }
+}
+
+.btn-danger {
+    background: rgb(243, 48, 48);
+}
+
+.btn-default {
+    background: rgb(255, 164, 46);
+    color: #fff;
+}
 
