@@ -101,6 +101,10 @@ table td, .table th {
         margin-right: 10px;
     }
 
+    #MaxSize, #MinSize {
+        height: 25px;
+    }
+
     .filters_row {
         #Name, #Id {
             width: 140px;
@@ -121,6 +125,11 @@ table td, .table th {
             padding-left: 1px;
             padding-top: 15px;
             padding-bottom: 15px;
+        }
+
+        .top-headers-row {
+            border-bottom: 1px solid rgb(173, 173, 173);
+            padding: 0;
         }
     }
 }

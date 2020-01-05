@@ -133,10 +133,23 @@ export class DriveComponent implements OnInit {
   clearFilters() {
     this.filtersModel = new FileFilterModel()
     this.filtersModel.filters = new FileFiltes()
+    this.filters = {
+      size: new Array<number>(2),
+      uploadTime: new Array<Date>(2)
+    }
     this.loadFiles()
   }
 
   filtersValidate(): boolean {
+    if (!!this.filters.uploadTime[0] != !!this.filters.uploadTime[1]) {
+      return false
+    }
+    if (!!this.filters.size[0] != !!this.filters.size[1]) {
+      return false
+    }
+    if (!new RegExp('^([a-zA-Z0-9-]){30,50}$').test(this.filtersModel.filters.id)) {
+      return false
+    }
     return true
   }
 
@@ -145,13 +158,21 @@ export class DriveComponent implements OnInit {
       return
 
     this.filtersModel.pageIndex = 1
-    this.filtersModel.filters.uploadTime = new Array<number>(2)
-    this.filtersModel.filters.uploadTime[0] = new Date(this.filters.uploadTime[0]).getTime() / 1000
-    this.filtersModel.filters.uploadTime[1] = new Date(this.filters.uploadTime[1]).getTime() / 1000
-
-    this.filtersModel.filters.size = new Array<number>(2)
-    this.filtersModel.filters.size[0] = this.filters.size[0] * 1024
-    this.filtersModel.filters.size[1] = this.filters.size[1] * 1024
+    if (this.filters.uploadTime[0] && this.filters.uploadTime[1]) {
+      this.filtersModel.filters.uploadTime = new Array<number>(2)
+      this.filtersModel.filters.uploadTime[0] = new Date(this.filters.uploadTime[0]).getTime() / 1000
+      this.filtersModel.filters.uploadTime[1] = new Date(this.filters.uploadTime[1]).getTime() / 1000
+    } else {
+      this.filtersModel.filters.uploadTime = null
+    }
+    
+    if (this.filters.size[0] && this.filters.size[1]) {
+      this.filtersModel.filters.size = new Array<number>(2)
+      this.filtersModel.filters.size[0] = this.filters.size[0] * 1024
+      this.filtersModel.filters.size[1] = this.filters.size[1] * 1024
+     } else {
+      this.filtersModel.filters.size = null
+     }
 
     this.filtersModel.filters.name = this.filtersModel.filters.name ? 
       this.filtersModel.filters.name : null
