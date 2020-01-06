@@ -185,23 +185,22 @@ export class DriveComponent implements OnInit {
   }
 
   filtersValidate(): boolean {
-    if (!!this.filters.uploadTime[0] != !!this.filters.uploadTime[1]) {
-      return false
-    }
-    if (!!this.filters.size[0] != !!this.filters.size[1]) {
-      return false
-    }
-    if (this.filters.size[0] < 0.001 || this.filters.size[0] > 51200 
-      || this.filters.size[1] < 0.001 || this.filters.size[0] > 51200) {
+    if (this.filters.size[0] && this.filters.size[1]) {
+      if (this.filters.size[1] < this.filters.size[0]) {
+        this.validateMessage = "max size cannot be less than min size"
+        return false
+      }
+      if (this.filters.size[0] < 0.001 || this.filters.size[0] > 51200 
+        || this.filters.size[1] < 0.001 || this.filters.size[0] > 51200) {
         this.validateMessage = "min size = 0.001 max size = 51200"
-      return false
+        return false
+        }
     }
     if (this.filtersModel.filters.id && !new RegExp('^([a-zA-Z0-9-]){30,50}$').test(this.filtersModel.filters.id)) {
       this.validateMessage = "Invalid id"
       return false
     }
-    if (this.filtersModel.filters.name && (this.filtersModel.filters.name.length > 100 
-      || this.filtersModel.filters.name.indexOf(".") == -1)) {
+    if (this.filtersModel.filters.name && this.filtersModel.filters.name.length > 100) {
       this.validateMessage = "Invalid name"
       return false
     }
@@ -217,16 +216,27 @@ export class DriveComponent implements OnInit {
     if (this.filters.uploadTime[0] && this.filters.uploadTime[1]) {
       this.filtersModel.filters.uploadTime = new Array<number>(2)
       this.filtersModel.filters.uploadTime[0] = new Date(this.filters.uploadTime[0]).getTime() / 1000
-      this.filtersModel.filters.uploadTime[1] = new Date(this.filters.uploadTime[1]).getTime() / 1000
+      this.filtersModel.filters.uploadTime[1] = new Date(this.filters.uploadTime[1]).getTime() / 1000 + 86399
+    } else if (!!this.filters.uploadTime[0] != !!this.filters.uploadTime[1]) {
+      this.filtersModel.filters.uploadTime = new Array<number>(2)
+      this.filtersModel.filters.uploadTime[0] = this.filters.uploadTime[0] 
+        ? new Date(this.filters.uploadTime[0]).getTime() / 1000 : 1500000000
+      this.filtersModel.filters.uploadTime[1] = this.filters.uploadTime[1] 
+        ? new Date(this.filters.uploadTime[1]).getTime() / 1000 + 86399
+        : new Date(Date.now()).getTime() / 1000
     } else {
       this.filtersModel.filters.uploadTime = null
     }
     
     if (this.filters.size[0] && this.filters.size[1]) {
       this.filtersModel.filters.size = new Array<number>(2)
-      this.filtersModel.filters.size[0] = this.filters.size[0] * 1024
-      this.filtersModel.filters.size[1] = this.filters.size[1] * 1024
-     } else {
+      this.filtersModel.filters.size[0] = this.filters.size[0] * 1000
+      this.filtersModel.filters.size[1] = this.filters.size[1] * 1000
+    } else if (!!this.filters.size[0] != !!this.filters.size[1]) {
+      this.filtersModel.filters.size = new Array<number>(2)
+      this.filtersModel.filters.size[0] = this.filters.size[0] ? this.filters.size[0] * 1000 : 1
+      this.filtersModel.filters.size[1] = this.filters.size[1] ? this.filters.size[1] * 1000 : 51200000
+    } else {
       this.filtersModel.filters.size = null
      }
 
