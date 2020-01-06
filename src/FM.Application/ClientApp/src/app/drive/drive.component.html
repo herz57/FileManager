@@ -91,7 +91,8 @@
     <td></td>
     <td></td>
     <td>
-        <input type="checkbox" [(ngModel)]="editedFile.allowedanonymous" class="form-control radio-allowed" />
+        <input type="radio" [(ngModel)]="editedFile.allowedanonymous" value="true" class="radio-allowed" /> Yes
+        <input type="radio" style="margin-left: 15px;" [(ngModel)]="editedFile.allowedanonymous" value="false" class="radio-allowed" /> No
     </td>
     <td>
         <input type="button" value="Save" (click)="saveFile()" class="btn btn-success" />

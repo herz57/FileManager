@@ -60,8 +60,7 @@ export class DriveComponent implements OnInit {
       this.files.length = response.userFilesLength
       this.page = this.filtersModel.pageIndex
     } else {
-      for (let i = 0, j = 0; i < this.files.length; i++) {
-        if (this.files[i] == undefined)
+      for (let i = (this.filtersModel.pageIndex - 1) * 10, j = 0; i < this.files.length; i++) {
           this.files[i] = response.files[j++]
       }
       this.page = this.filtersModel.pageIndex
@@ -83,7 +82,7 @@ export class DriveComponent implements OnInit {
   saveFile() {
     this._fileService.updateFile(this.editedFile).subscribe(res => {
         this.statusMessage = res,
-        this.loadFiles();
+        this.loadFiles()
     });
     this.editedFile = null;
   }
@@ -104,11 +103,7 @@ export class DriveComponent implements OnInit {
     let fileIds: string[] = [file.id]
     this._fileService.deleteFiles(fileIds).subscribe(() => {
         this.statusMessage = 'Deleted',
-
-        this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
-          this.files = res.files
-          console.log(this.files)
-        })
+        this.loadFiles()
     })
   }
 
@@ -140,7 +135,18 @@ export class DriveComponent implements OnInit {
       this.filtersModel.sortingMode = this.filtersModel.sortingMode < 2 ? ++this.filtersModel.sortingMode : 0
     }
     this.filtersModel.sortingColumn = column
-    this.loadFiles()
+    this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
+      if (this.filtersModel.pageIndex != 1) {
+        for (let i = this.files.length - 1, j = res.files.length - 1; i > 0; i--) {
+          if (this.files[i] != undefined) {
+            this.files[i] = res.files[j--]
+          }
+      }
+      this.page = this.filtersModel.pageIndex
+      } else {
+        this.paginationResponseHandler(res)
+      }
+    });
     this.changeSortArrow(index)
   }
 
