@@ -70,11 +70,10 @@
     <td>{{file.name}}</td>
     <td>{{formatFileSize(file.size)}}</td>
     <td>{{file.uploadedTime * 1000 - 7200000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-    <td>{{file.allowedAnonymous ? 'Yes' : 'No'}}</td>
-    <td class="history">
-    </td>
-    <td>
+    <td><input type="radio" class="allowed-control" [checked]="file.allowedAnonymous" (click)="checked=false">
         <input type="button" value="Edit" class="btn list-btn btn-default" (click)="editFile(file)" />
+    </td>
+    <td class="history">
     </td>
     <td>
         <input type="button" value="Delete" (click)="deleteFiles(file)" class="btn list-btn btn-danger" />
@@ -95,8 +94,7 @@
     <td></td>
     <td></td>
     <td>
-        <input type="radio" [(ngModel)]="editedFile.allowedanonymous" value="true" class="radio-allowed" /> Yes
-        <input type="radio" style="margin-left: 15px;" [(ngModel)]="editedFile.allowedanonymous" value="false" class="radio-allowed" /> No
+        <input type="checkbox" [(ngModel)]="editedFile.allowedAnonymous" class="allowed-control">
     </td>
     <td>
         <input type="button" value="Save" (click)="saveFile()" class="btn btn-success" />
