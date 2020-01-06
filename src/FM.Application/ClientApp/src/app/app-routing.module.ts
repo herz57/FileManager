@@ -11,11 +11,16 @@ import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.co
 import { ChangepassComponent } from './account/changepass/changepass.component';
 import { ForgotpasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { FileHistoryComponent } from './drive/file-history/file-history/file-history.component';
 
 const accountChildRoutes: Routes = [
   { path: 'changepass', component: ChangepassComponent},
   { path: 'deleteaccount', component: DeleteaccountComponent},
 ];
+
+const driveChildRoutes: Routes = [
+  { path: 'file-history/:id', component: FileHistoryComponent }
+]
 
 const routes: Routes = [
   { 
@@ -37,6 +42,7 @@ const routes: Routes = [
   {
     path: 'drive',
     component: DriveComponent,
+    children: driveChildRoutes,
     canActivate: [AuthGuard]
   },
   {

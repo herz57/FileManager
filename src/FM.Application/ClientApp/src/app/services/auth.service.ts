@@ -83,6 +83,7 @@ export class AuthService {
         tap((tokens) => this.storeTokens(tokens)),
         mapTo(true),
         catchError(error => {
+          this.logoutUser()
           this._router.navigate(['/login'])
           return of(false);
         }));

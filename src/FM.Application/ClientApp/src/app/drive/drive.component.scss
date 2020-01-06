@@ -30,6 +30,14 @@
     padding-right: 10px;
 }
 
+.history {
+    position: absolute;
+    overflow: hidden;
+    right:0;
+    top:0;
+    bottom:0;
+}
+
 table td, .table th {
     border-top: none;
     padding: 11px;
@@ -112,6 +120,7 @@ table td, .table th {
         width: 100px;
         border: none;
         margin-bottom: 0;
+        height: 100%;
     
         thead th {
             border: none;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FileService } from '../services/file.service';
 import { FileModel } from './Models/fileModel';
@@ -6,6 +6,7 @@ import { FilesResponseModel } from './Models/filesResponseModel';
 import { FileFilterModel } from './Models/fileFilterModel';
 import { FileFiltes } from './Models/fileFilters';
 import { saveAs } from "file-saver";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-drive',
@@ -35,7 +36,9 @@ export class DriveComponent implements OnInit {
 
   constructor(private http: HttpClient,
               private _fileService: FileService,
-              private filtersModel: FileFilterModel) {
+              private filtersModel: FileFilterModel,
+              private elementRef: ElementRef,
+              private _router: Router) {
         this.files = new Array<FileModel>();
         this.sortSymbol[0] = '&uarr;'
         filtersModel.sortingMode = 1
@@ -48,10 +51,14 @@ export class DriveComponent implements OnInit {
     this.loadFiles();
   }
 
-  private loadFiles() {console.log(this.filtersModel.pageIndex)
+  private loadFiles() {
     this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
       this.paginationResponseHandler(res)
     });
+  }
+
+  fileHistory(file, event) {
+    this._router.navigate(['drive/file-history/' + file.id])
   }
 
   paginationResponseHandler(response) {

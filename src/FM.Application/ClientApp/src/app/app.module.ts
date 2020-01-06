@@ -20,7 +20,8 @@ import { ChangepassComponent } from './account/changepass/changepass.component';
 import { DeleteaccountComponent } from './account/deleteaccount/deleteaccount.component';
 import { ForgotpasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { FileFilterModel } from './drive/Models/FileFilterModel'
+import { FileFilterModel } from './drive/Models/FileFilterModel';
+import { FileHistoryComponent } from './drive/file-history/file-history/file-history.component'
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { FileFilterModel } from './drive/Models/FileFilterModel'
     DeleteaccountComponent,
     ForgotpasswordComponent,
     ResetPasswordComponent,
+    FileHistoryComponent,
   ],
   imports: [
     BrowserModule,

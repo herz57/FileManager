@@ -1,0 +1,26 @@
+<div class="history-wrapper">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>#</td>
+            <td class="files-top-row" (click)="sort('Id', 0)" > Id</td>
+            <td class="files-top-row" (click)="sort('Name', 1)"> Name</td>
+            <td class="files-top-row" (click)="sort('Size', 2)"> Size</td>
+            <td class="files-top-row" (click)="sort('UploadedTime', 3)"> UploadedTime</td>
+            <td class="files-top-row" (click)="sort('AllowedAnonymous', 4)"> AllowedAnonymous</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let file of fileHistory | paginate: { itemsPerPage: 10, currentPage: page }" (click)="fileHistory(file)">
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+        </tr>
+        <router-outlet></router-outlet>
+    </tbody>
+</table>
+<pagination-controls (pageChange)="pagination.pageIndex = $event" (pageChange)="loadFiles()"></pagination-controls>
+</div>

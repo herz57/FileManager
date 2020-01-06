@@ -40,7 +40,7 @@
     </table>
 </div>
 
-
+<div class="table-wrapper" style="position: relative; display: inline-block;">
 <table class="table table-striped">
     <thead>
         <tr>
@@ -52,14 +52,16 @@
             <td class="files-top-row" (click)="sort('AllowedAnonymous', 4)"><span class="arrow" [innerHTML]='sortSymbol[4]'></span> AllowedAnonymous</td>
         </tr>
     </thead>
-    <tbody>
-        <tr *ngFor="let file of files | paginate: { itemsPerPage: 10, currentPage: page }">
+    <tbody style="position: relative;">
+        <tr *ngFor="let file of files | paginate: { itemsPerPage: 10, currentPage: page }" (click)="fileHistory(file, $event)">
             <ng-template [ngTemplateOutlet]="loadTemplate(file)" 
                         [ngTemplateOutletContext]="{ $implicit: file}">
             </ng-template>
         </tr>
     </tbody>
+
 </table>
+</div>
 <div>{{statusMessage}}</div>
     
 <ng-template #readOnlyTemplate let-file>
@@ -69,6 +71,8 @@
     <td>{{formatFileSize(file.size)}}</td>
     <td>{{file.uploadedTime * 1000 - 7200000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
     <td>{{file.allowedAnonymous ? 'Yes' : 'No'}}</td>
+    <td class="history">
+    </td>
     <td>
         <input type="button" value="Edit" class="btn list-btn btn-default" (click)="editFile(file)" />
     </td>
