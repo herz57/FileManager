@@ -224,13 +224,18 @@ namespace FM.FileService.Services
             return _unitOfWork.FileRepository.CountAsync(_fileFilterSpecification.Criteria);
         }
 
+        public Task<int> GetFileHistoryCount(Guid fileId)
+        {
+            return _unitOfWork.FileReadHistoryRepository.CountAsync(h => h.FileId == fileId);
+        }
+
         public async Task<IReadOnlyList<FileReadHistoryEntity>> GetFileHistoriesAsync(Guid fileId, 
             int pageIndex,
             int itemsPage)
         {
             FileFilterSpecification<FileReadHistoryEntity> fileHistoryFilterSpecification = 
                     new FileFilterSpecification<FileReadHistoryEntity>(f => f.FileId == fileId,
-                    itemsPage * pageIndex,
+                    itemsPage * (pageIndex - 1),
                     itemsPage);
 
             var result = await ApplySpecification(fileHistoryFilterSpecification).ToArrayAsync();

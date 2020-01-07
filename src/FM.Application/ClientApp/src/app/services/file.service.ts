@@ -8,11 +8,16 @@ import { Observable } from 'rxjs';
 export class FileService {
 
   private url = 'http://localhost:5000/api/file/'
+  private fileHistoryUrl = 'http://localhost:5000/api/filehistory/'
 
   constructor(private _http: HttpClient) { }
 
   getFiles(options: any) {
     return this._http.post<any>(this.url + 'files', options)
+  }
+
+  getFileHistories(options: any) {
+    return this._http.get<any>(this.fileHistoryUrl + options.fileId + '/' + options.pageIndex + '/' + options.itemsPage)
   }
 
   deleteFiles(fileIds: any) {

@@ -57,7 +57,7 @@ export class DriveComponent implements OnInit {
     });
   }
 
-  fileHistory(file, event) {
+  fileHistory(file) {
     this._router.navigate(['drive/file-history/' + file.id])
   }
 
@@ -92,6 +92,15 @@ export class DriveComponent implements OnInit {
         this.loadFiles()
     });
     this.editedFile = null;
+  }
+
+_fileId: string = ""
+  public setId = (fileId) => {
+    if (fileId == this._fileId) {
+      this._fileId = ""
+      return
+    }
+    this._fileId = fileId
   }
 
   downloadFile(file) {

@@ -11,6 +11,5 @@ namespace FM.FileService.Domain.DTOs
         public Guid FileId { get; set; }
         public string UserId { get; set; }
         public long Date { get; set; }
-        public int MyProperty { get; set; }
     }
 }

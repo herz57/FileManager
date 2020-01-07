@@ -5,9 +5,17 @@
     font-size: 9pt;
 }
 
-.table-striped tbody tr:hover {
-    color: #5c66f5;
-    cursor: pointer;
+#details {
+    position: relative;
+    font-weight: 800;
+    text-decoration: none;
+    color: rgb(248, 248, 248);
+    top: 3px;
+    
+    &:hover {
+        color: #5c66f5;
+        cursor: pointer;
+    }
 }
 
 .table-striped tbody tr:nth-child(even) {background-color: #3a3a3a;}
@@ -28,14 +36,6 @@
     padding: 0;
     padding-left: 10px;
     padding-right: 10px;
-}
-
-.history {
-    position: absolute;
-    overflow: hidden;
-    right:0;
-    top:0;
-    bottom:0;
 }
 
 table td, .table th {
@@ -170,3 +170,11 @@ table td, .table th {
     margin-left: 20px;
 }
 
+.btn-save {
+    margin-left: 20px;
+}
+
+.history {
+    float: left;
+    margin-left: -400px;
+}

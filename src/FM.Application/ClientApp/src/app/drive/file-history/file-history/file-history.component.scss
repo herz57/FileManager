@@ -2,8 +2,17 @@
     z-index: 99;
 }
 
-.history-wrapper {
-    height: 100%;
-    padding: 15px;
-    background: rgb(36, 36, 36);
+.table-striped tbody tr {
+    background-color: rgb(255, 255, 255)
 }
+
+.table td, .table th {
+    border: none;
+    color: rgb(49, 49, 49);
+}
+
+.table thead {
+    color: rgb(43, 43, 43);
+}
+
+.table-striped tbody tr:nth-child(even) {background-color: #e9e9e9;}

@@ -25,13 +25,25 @@ namespace FM.FileService.Controllers
 
         [Authorize]
         [HttpGet("{fileId}/{pageIndex?}/{itemsPage?}")]
-        public async Task<ActionResult<FileReadHistoryDto[]>> GetFileReadHistoryAsync([FromRoute]Guid fileId, 
+        public async Task<ActionResult<FileHistoryResponseDto>> GetFileReadHistoryAsync([FromRoute]Guid fileId, 
             [FromRoute]int pageIndex = 0,
             [FromRoute]int itemsPage = 10)
         {
             var histories = await _fileManager.GetFileHistoriesAsync(fileId, pageIndex, itemsPage);
             var mappedHistories = _mapper.Map<FileReadHistoryDto[]>(histories);
-            return mappedHistories;
+
+            FileHistoryResponseDto historyResponse = new FileHistoryResponseDto
+            {
+                History = mappedHistories
+            };
+
+            if (pageIndex == 1)
+            {
+                int historyCount = await _fileManager.GetFileHistoryCount(fileId);
+                historyResponse.FileHistoryLength = historyCount;
+            }
+
+            return historyResponse;
         }
     }
 }

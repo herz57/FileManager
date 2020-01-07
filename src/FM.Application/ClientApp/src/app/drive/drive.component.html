@@ -45,35 +45,32 @@
     <thead>
         <tr>
             <td>#</td>
-            <td class="files-top-row" (click)="sort('Id', 0)" ><span class="arrow" [innerHTML]='sortSymbol[0]'></span> Id</td>
             <td class="files-top-row" (click)="sort('Name', 1)"><span class="arrow" [innerHTML]='sortSymbol[1]'></span> Name</td>
             <td class="files-top-row" (click)="sort('Size', 2)"><span class="arrow" [innerHTML]='sortSymbol[2]'></span> Size</td>
-            <td class="files-top-row" (click)="sort('UploadedTime', 3)"><span class="arrow" [innerHTML]='sortSymbol[3]'></span> UploadedTime</td>
-            <td class="files-top-row" (click)="sort('AllowedAnonymous', 4)"><span class="arrow" [innerHTML]='sortSymbol[4]'></span> AllowedAnonymous</td>
+            <td class="files-top-row" (click)="sort('UploadedTime', 3)"><span class="arrow" [innerHTML]='sortSymbol[3]'></span> Uploaded date</td>
+            <td class="files-top-row" (click)="sort('AllowedAnonymous', 4)"><span class="arrow" [innerHTML]='sortSymbol[4]'></span> Allowed anonymous</td>
         </tr>
     </thead>
     <tbody style="position: relative;">
-        <tr *ngFor="let file of files | paginate: { itemsPerPage: 10, currentPage: page }" (click)="fileHistory(file, $event)">
+        <tr *ngFor="let file of files | paginate: { itemsPerPage: 10, currentPage: page }">
             <ng-template [ngTemplateOutlet]="loadTemplate(file)" 
                         [ngTemplateOutletContext]="{ $implicit: file}">
             </ng-template>
         </tr>
     </tbody>
-
 </table>
 </div>
-<div>{{statusMessage}}</div>
     
 <ng-template #readOnlyTemplate let-file>
     <td>{{files.indexOf(file) + 1}}</td>
-    <td>{{file.id}}</td>
     <td>{{file.name}}</td>
     <td>{{formatFileSize(file.size)}}</td>
     <td>{{file.uploadedTime * 1000 - 7200000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-    <td><input type="radio" class="allowed-control" [checked]="file.allowedAnonymous" (click)="checked=false">
+    <td style="position: relative; float: left;"><input type="radio" class="allowed-control" [checked]="file.allowedAnonymous" (click)="checked=false">
         <input type="button" value="Edit" class="btn list-btn btn-default" (click)="editFile(file)" />
     </td>
-    <td class="history">
+    <td>
+        <a id="details" (click)="fileHistory(file)" (click)="setId(file.id)">Details</a>
     </td>
     <td>
         <input type="button" value="Delete" (click)="deleteFiles(file)" class="btn list-btn btn-danger" />
@@ -84,6 +81,10 @@
     <td>
         <input type="button" value="Download" (click)="downloadFile(file)" class="btn list-btn btn-success" />
     </td>
+    <br>
+    <td *ngIf="_fileId == file.id && editedFile == null" class="history">
+        <router-outlet></router-outlet>
+    </td>
 </ng-template>
    
 
@@ -92,15 +93,15 @@
     <td></td>
     <td></td>
     <td></td>
-    <td></td>
     <td>
         <input type="checkbox" [(ngModel)]="editedFile.allowedAnonymous" class="allowed-control">
-    </td>
-    <td>
-        <input type="button" value="Save" (click)="saveFile()" class="btn btn-success" />
+        <input type="button" value="Save" (click)="saveFile()" class="btn btn-success btn-save" />
     </td>
     <td>
         <input type="button" value="Cancel" (click)="cancel()" class="btn btn-warning" />
     </td>
+    <td></td>
+    <td></td>
+    <td></td>
 </ng-template>
 <pagination-controls (pageChange)="filtersModel.pageIndex = $event" (pageChange)="loadFiles()"></pagination-controls>

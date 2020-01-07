@@ -1,26 +1,23 @@
-<div class="history-wrapper">
-<table class="table table-striped">
+<div *ngIf="fileHistory; else elseBlock">
+<table *ngIf="fileHistory" class="table table-striped">
     <thead>
         <tr>
             <td>#</td>
-            <td class="files-top-row" (click)="sort('Id', 0)" > Id</td>
-            <td class="files-top-row" (click)="sort('Name', 1)"> Name</td>
-            <td class="files-top-row" (click)="sort('Size', 2)"> Size</td>
-            <td class="files-top-row" (click)="sort('UploadedTime', 3)"> UploadedTime</td>
-            <td class="files-top-row" (click)="sort('AllowedAnonymous', 4)"> AllowedAnonymous</td>
+            <td class="files-top-row"> User id</td>
+            <td class="files-top-row"> Date</td>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let file of fileHistory | paginate: { itemsPerPage: 10, currentPage: page }" (click)="fileHistory(file)">
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-            <td>6</td>
+        <tr *ngFor="let history of fileHistory | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize" (click)="fileHistory(file)">
+            <td>{{fileHistory.indexOf(history) + 1}}</td>
+            <td>{{history.userId}}</td>
+            <td>{{history.date}}</td>
         </tr>
-        <router-outlet></router-outlet>
     </tbody>
 </table>
-<pagination-controls (pageChange)="pagination.pageIndex = $event" (pageChange)="loadFiles()"></pagination-controls>
+<ngb-pagination
+  [(page)]="page"
+  [pageSize]="pageSize"
+  [collectionSize]="fileHistory.length" (pageChange)="loadHistory()"></ngb-pagination>
 </div>
+<ng-template #elseBlock>{{hasHistory}}</ng-template>
