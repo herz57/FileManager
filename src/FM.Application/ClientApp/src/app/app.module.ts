@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToasterModule } from 'angular2-toaster';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,7 +48,9 @@ import { FileHistoryComponent } from './drive/file-history/file-history/file-his
     AppRoutingModule,
     FileUploadModule,
     NgxPaginationModule,
-    NgbModule
+    NgbModule,
+    BrowserAnimationsModule,
+    ToasterModule.forRoot()
   ],
   providers: [AuthService, AuthGuard, IsNotLoggedInGuard,
     {

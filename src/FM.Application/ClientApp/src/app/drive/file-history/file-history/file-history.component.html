@@ -1,5 +1,5 @@
 <div *ngIf="fileHistory; else elseBlock">
-<table *ngIf="fileHistory" class="table table-striped">
+<table class="table table-striped">
     <thead>
         <tr>
             <td>#</td>
@@ -10,8 +10,8 @@
     <tbody>
         <tr *ngFor="let history of fileHistory | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize" (click)="fileHistory(file)">
             <td>{{fileHistory.indexOf(history) + 1}}</td>
-            <td>{{history.userId}}</td>
-            <td>{{history.date}}</td>
+            <td *ngIf="history">{{history.userId ? history.userId : 'anonymous'}}</td>
+            <td *ngIf="history">{{history.date}}</td>
         </tr>
     </tbody>
 </table>

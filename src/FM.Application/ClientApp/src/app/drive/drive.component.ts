@@ -7,6 +7,7 @@ import { FileFilterModel } from './Models/fileFilterModel';
 import { FileFiltes } from './Models/fileFilters';
 import { saveAs } from "file-saver";
 import { Router } from '@angular/router';
+import { ToasterService } from 'angular2-toaster';
 
 @Component({
   selector: 'app-drive',
@@ -38,7 +39,8 @@ export class DriveComponent implements OnInit {
               private _fileService: FileService,
               private filtersModel: FileFilterModel,
               private elementRef: ElementRef,
-              private _router: Router) {
+              private _router: Router,
+              private toasterService: ToasterService) {
         this.files = new Array<FileModel>();
         this.sortSymbol[0] = '&uarr;'
         filtersModel.sortingMode = 1
@@ -67,7 +69,7 @@ export class DriveComponent implements OnInit {
       this.files.length = response.userFilesLength
       this.page = this.filtersModel.pageIndex
     } else {
-      for (let i = (this.filtersModel.pageIndex - 1) * 10, j = 0; i < this.files.length; i++) {
+      for (let i = (this.filtersModel.pageIndex - 1) * 10, j = 0; j < response.files.length; i++) {
           this.files[i] = response.files[j++]
       }
       this.page = this.filtersModel.pageIndex
@@ -119,7 +121,8 @@ _fileId: string = ""
     let fileIds: string[] = [file.id]
     this._fileService.deleteFiles(fileIds).subscribe(() => {
         this.statusMessage = 'Deleted',
-        this.loadFiles()
+        this.loadFiles() 
+        --this.files.length
     })
   }
 
@@ -131,8 +134,19 @@ _fileId: string = ""
     this.editedFile = null;
   }
 
-  shareFile(event) {
-    console.log(event)
+  shareFile(fileId) {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = 'http://localhost:5000/api/file/' + fileId;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.toasterService.pop('success', '', 'Link to the file has been copied to clipboard');
   }
 
   formatFileSize(size) {

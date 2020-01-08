@@ -42,15 +42,14 @@ export class FileHistoryComponent implements OnInit {
     });
   }
 
-  paginationResponseHandler(response) {console.log(response)
+  paginationResponseHandler(response) {
     if (response.fileHistoryLength > 0) {
       this.fileHistory = response.history;
       this.fileHistory.length = response.fileHistoryLength
     } else {
-      for (let i = (this.page - 1) * this.options.itemsPage, j = 0; i < this.fileHistory.length; i++) {
+      for (let i = (this.page - 1) * this.options.itemsPage, j = 0; j < response.history.length; i++) {
           this.fileHistory[i] = response.history[j++]
       }
     }
   }
-
 }
