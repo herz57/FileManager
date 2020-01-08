@@ -60,6 +60,13 @@ $custom_green_color: rgb(59, 187, 70);
     top: -35px;
 }
 
+.panel-body {
+    display: inline-block;
+    padding: 10px;
+    padding-top: 25px;
+    position: absolute;
+}
+
 .table_container {
     margin-top: 40px;
 }
