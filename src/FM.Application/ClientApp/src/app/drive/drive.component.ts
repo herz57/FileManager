@@ -33,6 +33,7 @@ export class DriveComponent implements OnInit {
   }
   validateMessage: string
   isNewRecord: boolean
+  haveFiles: boolean = false
 
 
   constructor(private http: HttpClient,
@@ -56,6 +57,7 @@ export class DriveComponent implements OnInit {
   private loadFiles() {
     this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
       this.paginationResponseHandler(res)
+      this.haveFiles = this.files.length != 0 ? true : false
     });
   }
 
@@ -273,6 +275,7 @@ _fileId: string = ""
       this.files = res.files;
       this.files.length = res.userFilesLength
       this.page = 1
+      this.haveFiles = true
     })
   }
 }

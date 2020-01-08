@@ -174,9 +174,13 @@ table td, .table th {
     background: rgb(255, 179, 39);
     color: #fff;
     margin-left: 20px;
+    padding: 0;
+    padding-right: 4px;
+    padding-left: 4px;
 }
 
 .btn-save {
+    position: absolute;
     margin-left: 20px;
 }
 

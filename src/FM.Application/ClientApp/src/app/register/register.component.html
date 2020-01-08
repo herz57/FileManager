@@ -21,7 +21,7 @@
                 <input class="text" [(ngModel)]="registerUserData.passwordconfirm" #passwordconfirm="ngModel" type="password" name="passwordconfirm" placeholder="Confirm Password" required pattern="{{ password.value }}">
                 <input type="submit" (click)="registerUser()" value="SIGN UP" [disabled]="Username.invalid || email.invalid || password.invalid || passwordconfirm.invalid">
             </form>
-            <p>Already have an Account? <a routerLink="/login"> Login Now</a></p>
+            <p>Already have an Account? <a routerLink="/login"> Sign in</a></p>
         </div>
     </div>
 </div>
