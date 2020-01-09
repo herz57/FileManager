@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
 
-  private url = 'http://cc.filecoreapp.com:80/api/file/'
-  private fileHistoryUrl = 'http://cc.filecoreapp.com:80/api/filehistory/'
-
   constructor(private _http: HttpClient) { }
 
   getFiles(options: any) {
-    return this._http.post<any>(this.url + 'files', options)
+    return this._http.post<any>(environment.fileEndpoint + 'files', options)
   }
 
   getFileHistories(options: any) {
-    return this._http.get<any>(this.fileHistoryUrl + options.fileId + '/' + options.pageIndex + '/' + options.itemsPage)
+    return this._http.get<any>(environment.fileHistoryEndpoint + options.fileId + '/' + options.pageIndex + '/' + options.itemsPage)
   }
 
   deleteFiles(fileIds: any) {
@@ -27,15 +25,15 @@ export class FileService {
       }),
       body: fileIds 
     }
-    return this._http.delete<any>(this.url, options)
+    return this._http.delete<any>(environment.fileEndpoint, options)
   }
 
   updateFile(file: any) {
-    return this._http.put<any>(this.url, file)
+    return this._http.put<any>(environment.fileEndpoint, file)
   }
 
   downloadFile(fileId: string): Observable<any> {
-    return this._http.get(this.url + fileId, {
+    return this._http.get(environment.fileEndpoint + fileId, {
       responseType: "blob"
     });
   }

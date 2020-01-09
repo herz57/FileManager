@@ -10,7 +10,7 @@ import { UserService } from '../services/user.service';
 })
 export class RegisterComponent implements OnInit {
 
-  registerUserData = {}
+  registerUserData: IRegisterUser
 
   constructor(private _auth: AuthService,
               private _router: Router,
@@ -22,4 +22,11 @@ export class RegisterComponent implements OnInit {
   registerUser() {
     this._userService.registerUser(this.registerUserData)
   }
+}
+
+export interface IRegisterUser {
+  username: string
+  email: string
+  password: string
+  passwordconfirm: string
 }

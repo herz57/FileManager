@@ -8,6 +8,7 @@ import { FileFiltes } from './Models/fileFilters';
 import { saveAs } from "file-saver";
 import { Router } from '@angular/router';
 import { ToasterService } from 'angular2-toaster';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-drive',
@@ -34,14 +35,15 @@ export class DriveComponent implements OnInit {
   validateMessage: string
   isNewRecord: boolean
   haveFiles: boolean = false
+  checked: any
 
 
-  constructor(private http: HttpClient,
-              private _fileService: FileService,
-              private filtersModel: FileFilterModel,
-              private elementRef: ElementRef,
-              private _router: Router,
-              private toasterService: ToasterService) {
+  constructor(public http: HttpClient,
+              public _fileService: FileService,
+              public filtersModel: FileFilterModel,
+              public elementRef: ElementRef,
+              public _router: Router,
+              public toasterService: ToasterService) {
         this.files = new Array<FileModel>();
         this.sortSymbol[0] = '&uarr;'
         filtersModel.sortingMode = 1
@@ -54,7 +56,7 @@ export class DriveComponent implements OnInit {
     this.loadFiles();
   }
 
-  private loadFiles() {
+  loadFiles() {
     this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
       this.paginationResponseHandler(res)
       this.haveFiles = this.files.length != 0 ? true : false
@@ -142,7 +144,7 @@ _fileId: string = ""
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = 'http://localhost:5000/api/file/' + fileId;
+    selBox.value = environment.fileEndpoint + fileId;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
@@ -167,18 +169,7 @@ _fileId: string = ""
       this.filtersModel.sortingMode = this.filtersModel.sortingMode < 2 ? ++this.filtersModel.sortingMode : 0
     }
     this.filtersModel.sortingColumn = column
-    this._fileService.getFiles(this.filtersModel).subscribe((res: FilesResponseModel) => {
-      if (this.filtersModel.pageIndex != 1) {
-        for (let i = this.files.length - 1, j = res.files.length - 1; i > 0; i--) {
-          if (this.files[i] != undefined) {
-            this.files[i] = res.files[j--]
-          }
-      }
-      this.page = this.filtersModel.pageIndex
-      } else {
-        this.paginationResponseHandler(res)
-      }
-    });
+    this.loadFiles()
     this.changeSortArrow(index)
   }
 

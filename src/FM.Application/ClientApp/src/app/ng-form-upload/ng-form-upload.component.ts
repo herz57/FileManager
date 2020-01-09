@@ -4,8 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
- 
-const URL = 'http://cc.filecoreapp.com:80/api/file/';
+import { environment } from '../../environments/environment';
  
 @Component({
   selector: 'app-ng-form-upload',
@@ -26,9 +25,9 @@ export class NgFormUploadComponent {
                 http: HttpClient){
                   
     this.uploader = new FileUploader({
-      url: URL,
+      url: environment.fileEndpoint,
       formatDataFunction: async (item) => {
-        return http.post<any>(URL, item)
+        return http.post<any>(environment.fileEndpoint, item)
       }
     });
 

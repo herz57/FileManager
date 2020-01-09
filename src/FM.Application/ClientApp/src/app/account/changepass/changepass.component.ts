@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ChangepassComponent implements OnInit {
 
-  changePasswordUserData = { }
+  changePasswordUserData: IChangePasswordUser
   response: string;
 
   constructor(private _userService: UserService,
@@ -28,4 +28,10 @@ export class ChangepassComponent implements OnInit {
     },
     err => console.log(err))
   }
+}
+
+export interface IChangePasswordUser {
+  currentpassword: string
+  newpassword: string
+  passwordconfirm: string
 }

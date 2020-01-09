@@ -11,10 +11,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class ResetPasswordComponent implements OnInit {
 
-  user = { 
-    id: "",
-    code: ""
-  }
+  user: IResetPasswordUser
 
   response: string;
 
@@ -39,4 +36,11 @@ export class ResetPasswordComponent implements OnInit {
     },
       err => console.log(err))
   }
+}
+
+export interface IResetPasswordUser {
+  password: string
+  passwordconfirm: string
+  id: string
+  code: string
 }

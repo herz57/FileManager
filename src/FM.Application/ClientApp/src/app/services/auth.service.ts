@@ -3,19 +3,16 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Router } from '@angular/router'
 import { tap, mapTo, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
 
-  private readonly apiUrl = "http://cc.filecoreapp.com:88"
-  private registerUrl = `${this.apiUrl}/api/users`;
-  private tokenEndpoint = `${this.apiUrl}/connect/token`;
-
-  constructor(private http: HttpClient,
-              private _router: Router) { }
+  constructor(public http: HttpClient,
+              public _router: Router) { }
 
   registerUser(user) {
-    return this.http.post<any>(this.registerUrl, user)
+    return this.http.post<any>(environment.usersEndpoint, user)
   }
 
   loginUser(user) {
@@ -29,7 +26,7 @@ export class AuthService {
       }
     });
 
-    return this.http.post<any>(this.tokenEndpoint, params)
+    return this.http.post<any>(environment.tokenEndpoint, params)
       .pipe(
         tap(tokens => this.storeTokens(tokens)),
         mapTo(true),
@@ -62,8 +59,6 @@ export class AuthService {
   }
 
   private storeTokens(tokens) {
-    let expiresAt: Number = (new Date().getTime() + tokens.expires_in * 1000);
-    localStorage.setItem('expiresAt', expiresAt.toString())
     localStorage.setItem('access_token', tokens.access_token);
     localStorage.setItem('refresh_token', tokens.refresh_token);
   }
@@ -78,7 +73,7 @@ export class AuthService {
       }
     });
 
-    return this.http.post<any>(this.tokenEndpoint, params)
+    return this.http.post<any>(environment.tokenEndpoint, params)
       .pipe(
         tap((tokens) => this.storeTokens(tokens)),
         mapTo(true),

@@ -10,6 +10,6 @@ export class AppComponent {
 
   year: number = new Date().getFullYear()
 
-  constructor(private _authService: AuthService) { }
+  constructor(public _authService: AuthService) { }
   title = 'ClientApp';
 }

@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  usersEndpoint: 'http://localhost:5001/api/users/',
+  fileEndpoint: 'http://localhost:5000/api/file/',
+  fileHistoryEndpoint: 'http://localhost:5000/api/filehistory/',
+  tokenEndpoint: 'http://localhost:5001/connect/token'
 };
 
 /*

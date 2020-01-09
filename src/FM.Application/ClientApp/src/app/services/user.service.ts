@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  URL = 'http://cc.filecoreapp.com:88/api/users/';
 
   constructor(private _auth: AuthService,
               private _router: Router,
@@ -23,18 +22,18 @@ export class UserService {
   }
 
   changePasswordUser(changePasswordUserData: any) {
-    return this._http.put<any>(this.URL, changePasswordUserData)
+    return this._http.put<any>(environment.usersEndpoint, changePasswordUserData)
   }
 
   deleteUser(passwordUserData: any) {
-    return this._http.delete<any>(this.URL + passwordUserData.value)
+    return this._http.delete<any>(environment.usersEndpoint + passwordUserData.value)
   }
 
   forgotPasswordUser(user: any) {
-    return this._http.post<any>(this.URL + 'forgotpass', user)
+    return this._http.post<any>(environment.usersEndpoint + 'forgotpass', user)
   }
 
   resetPasswordUser(passwordsWithCode: any) {
-    return this._http.post<any>(this.URL + 'resetpass', passwordsWithCode)
+    return this._http.post<any>(environment.usersEndpoint + 'resetpass', passwordsWithCode)
   }
 }
