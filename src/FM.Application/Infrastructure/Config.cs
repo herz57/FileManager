@@ -53,7 +53,6 @@ namespace STP.Identity.Application
                         Scopes.IdentityService,
                         Scopes.FileService
                     },
-                    AllowedCorsOrigins =     { "http://localhost:4200" },
                     AccessTokenLifetime = 300,
                     IdentityTokenLifetime = 300
                 }

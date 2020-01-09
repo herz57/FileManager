@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class FileService {
 
-  private url = 'http://localhost:5000/api/file/'
-  private fileHistoryUrl = 'http://localhost:5000/api/filehistory/'
+  private url = 'http://cc.filecoreapp.com:80/api/file/'
+  private fileHistoryUrl = 'http://cc.filecoreapp.com:80/api/filehistory/'
 
   constructor(private _http: HttpClient) { }
 

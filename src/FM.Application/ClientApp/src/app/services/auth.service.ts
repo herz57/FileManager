@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 @Injectable()
 export class AuthService {
 
-  private readonly apiUrl = "http://localhost:5001"
+  private readonly apiUrl = "http://cc.filecoreapp.com:88"
   private registerUrl = `${this.apiUrl}/api/users`;
   private tokenEndpoint = `${this.apiUrl}/connect/token`;
 

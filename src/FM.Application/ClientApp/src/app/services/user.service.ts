@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UserService {
 
-  URL = 'http://localhost:5001/api/users/';
+  URL = 'http://cc.filecoreapp.com:88/api/users/';
 
   constructor(private _auth: AuthService,
               private _router: Router,

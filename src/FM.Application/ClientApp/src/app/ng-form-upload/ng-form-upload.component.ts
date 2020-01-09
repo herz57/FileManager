@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
  
-const URL = 'http://localhost:5000/api/file/';
+const URL = 'http://cc.filecoreapp.com:80/api/file/';
  
 @Component({
   selector: 'app-ng-form-upload',

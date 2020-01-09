@@ -81,9 +81,8 @@ namespace FM.FileService
             services.AddCors(c =>
             {
                 c.AddPolicy("AllowOrigin", options => options
-                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowCredentials()
                     .AllowAnyHeader());
             });
         }

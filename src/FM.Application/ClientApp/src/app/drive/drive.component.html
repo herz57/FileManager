@@ -1,4 +1,4 @@
-<div class="drive-wrapper" *ngIf="haveFiles; else elseBlock">
+<div class="drive-wrapper" *ngIf="haveFiles;">
 <div class="form-group row" >
     <table class="table" >
         <thead>
@@ -107,4 +107,3 @@
 </ng-template>
 <pagination-controls (pageChange)="filtersModel.pageIndex = $event" (pageChange)="loadFiles()"></pagination-controls>
 </div>
-<ng-template #elseBlock>No files</ng-template>
