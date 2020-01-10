@@ -1,9 +1,10 @@
 <div class="main-w3layouts wrapper">
     <h2>SIGN UP</h2>
     <div class="main-agileinfo">
+        <span *ngIf="response" class="response">{{response}}</span>
         <div class="agileits-top">
             <form action="#" method="post" class="reg-form">
-                <div [hidden]="Username.valid || Username.untouched" class="alert-message ">
+                <div [hidden]="Username.valid || Username.untouched" class="alert-message">
                     Incorrect username format
                 </div>
                 <input class="text" [(ngModel)]="registerUserData.username" #Username="ngModel" type="text" name="Username" placeholder="Username" required pattern="^[a-zA-Z0-9]{5,16}">

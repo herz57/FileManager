@@ -29,11 +29,7 @@ export class AuthService {
     return this.http.post<any>(environment.tokenEndpoint, params)
       .pipe(
         tap(tokens => this.storeTokens(tokens)),
-        mapTo(true),
-        catchError(error => {
-          console.log(error.error);
-          return of(false);
-        }));
+        mapTo(true));
   }
 
   logoutUser() {

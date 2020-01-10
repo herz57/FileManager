@@ -9,7 +9,12 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ChangepassComponent implements OnInit {
 
-  changePasswordUserData: IChangePasswordUser
+  changePasswordUserData: IChangePasswordUser = {
+    currentpassword: "",
+    newpassword: "",
+    passwordconfirm: ""
+  }
+
   response: string;
 
   constructor(private _userService: UserService,
@@ -26,7 +31,9 @@ export class ChangepassComponent implements OnInit {
         this._authService.logoutUser()
       }, 1000)
     },
-    err => console.log(err))
+    err =>  {
+      this.response = err.error
+    })
   }
 }
 

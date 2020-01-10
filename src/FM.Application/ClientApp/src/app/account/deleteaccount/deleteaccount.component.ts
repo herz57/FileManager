@@ -9,7 +9,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class DeleteaccountComponent implements OnInit {
 
-  passwordUserData: IPasswordUser
+  passwordUserData: IPasswordUser = {
+    password: ""
+  }
+
   response: string
 
   constructor(private _userService: UserService,
@@ -26,10 +29,12 @@ export class DeleteaccountComponent implements OnInit {
         this._authService.logoutUser()
       }, 1000)
     },
-    err => console.log(err))
+    err =>  {
+      this.response = err.error
+    })
   }
 }
 
 export interface IPasswordUser {
-  value: string
+  password: string
 }

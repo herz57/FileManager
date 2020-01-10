@@ -10,7 +10,14 @@ import { UserService } from '../services/user.service';
 })
 export class RegisterComponent implements OnInit {
 
-  registerUserData: IRegisterUser
+  registerUserData: IRegisterUser = {
+    username: "",
+    email: "",
+    password: "",
+    passwordconfirm: ""
+  }
+
+  response: string
 
   constructor(private _auth: AuthService,
               private _router: Router,
@@ -21,6 +28,12 @@ export class RegisterComponent implements OnInit {
 
   registerUser() {
     this._userService.registerUser(this.registerUserData)
+    .subscribe(() => {
+      this._router.navigate(['/login']);
+    }, 
+    err => {
+      this.response = err.error
+    })
   }
 }
 

@@ -1,6 +1,7 @@
 <div class="main-w3layouts wrapper">
     <h2>SIGN IN</h2>
     <div class="main-agileinfo">
+        <span *ngIf="response" class="response">{{response}}</span>
         <div class="agileits-top">
             <form action="#" method="post" class="reg-form">
                 <div [hidden]="Username.valid || Username.untouched" class="alert-message ">

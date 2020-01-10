@@ -11,7 +11,12 @@ import { AuthService } from '../services/auth.service';
 })
 export class ResetPasswordComponent implements OnInit {
 
-  user: IResetPasswordUser
+  user: IResetPasswordUser = {
+    password: "",
+    passwordconfirm: "",
+    id: "",
+    code: ""
+  }
 
   response: string;
 
@@ -34,7 +39,9 @@ export class ResetPasswordComponent implements OnInit {
         this._authService.logoutUser()
       }, 1000)
     },
-      err => console.log(err))
+    err => {
+      this.response = err.error
+    })
   }
 }
 

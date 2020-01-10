@@ -11,12 +11,14 @@ import { Router } from '@angular/router'
 export class LoginComponent implements OnInit {
 
   loginUserData = {
-    username: "Vasya",
-    password: "Pass123$",
+    username: "",
+    password: "",
     client_id: "Web",
     client_secret: "secret",
     grant_type: "password",
   }
+
+  response: string
 
   constructor(private _auth: AuthService,
               private _router: Router) { }
@@ -30,7 +32,9 @@ export class LoginComponent implements OnInit {
       res => {
         this._router.navigate(['/drive']);
       },
-      err => console.log(err)
+      err => {
+        this.response = err.error.error_description
+      }
     ) 
   }
 }

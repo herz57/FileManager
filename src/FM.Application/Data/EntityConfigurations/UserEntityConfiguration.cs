@@ -14,6 +14,7 @@ namespace FM.Application.Data.EntityConfigurations
         {
             builder.HasKey(p => p.Id);
             builder.Property(u => u.UserName).HasMaxLength(30).IsRequired();
+            builder.HasIndex(u => u.Email).IsUnique();
         }
     }
 }

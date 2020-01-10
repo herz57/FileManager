@@ -33,10 +33,10 @@ blockquote, q {
     margin: 3em auto;
     background: rgba(0, 0, 0, 0.6);
     background-size: cover;
+    padding: 40px;
   }
   
   .agileits-top {
-    padding: 3em;
     font-size: 0.9em;
   }
   
@@ -162,3 +162,9 @@ blockquote, q {
     position: relative;
     overflow: hidden;
   }
+
+  .response {
+    position: absolute;
+    font-size: 10pt;
+    color: #f74242;
+}

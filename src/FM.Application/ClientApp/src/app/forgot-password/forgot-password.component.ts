@@ -8,7 +8,10 @@ import { UserService } from '../services/user.service';
 })
 export class ForgotpasswordComponent implements OnInit {
 
-  user: IForgotPasswordUser
+  user: IForgotPasswordUser = {
+    email: ""
+  }
+
   response: string
 
   constructor(private _userService: UserService) { }
@@ -19,7 +22,9 @@ export class ForgotpasswordComponent implements OnInit {
   sendEmail() {
     this._userService.forgotPasswordUser(this.user)
     .subscribe(res => this.response = res,
-    err => console.log(err))
+    err =>  {
+      this.response = err.error
+    })
   }
 }
 

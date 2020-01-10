@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -14,11 +14,7 @@ export class UserService {
               private _http: HttpClient) { }
 
   registerUser(registerUserData: any) {
-    this._auth.registerUser(registerUserData)
-    .subscribe(result => {
-      this._router.navigate(['/login']);
-    }, 
-    err => console.log(err))
+    return this._auth.registerUser(registerUserData)
   }
 
   changePasswordUser(changePasswordUserData: any) {
@@ -26,7 +22,11 @@ export class UserService {
   }
 
   deleteUser(passwordUserData: any) {
-    return this._http.delete<any>(environment.usersEndpoint + passwordUserData.value)
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }), 
+      body: passwordUserData
+  };
+    return this._http.delete<any>(environment.usersEndpoint, httpOptions)
   }
 
   forgotPasswordUser(user: any) {

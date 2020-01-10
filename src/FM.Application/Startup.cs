@@ -98,8 +98,8 @@ namespace FM.Application
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = _oauthOptions.AuthServer;
-                options.Audience = _oauthOptions.ApiName;
+                options.Authority = "http://cc.filedriveservice.com:88";
+                options.Audience = "identity";
                 options.RequireHttpsMetadata = false;
 
             });
@@ -122,22 +122,18 @@ namespace FM.Application
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors("AllowOrigin");
-            
-            //if (env.IsDevelopment())
-            //{
+
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Error");
-            //}
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
 
             app.UseStaticFiles();
-            //if (!env.IsDevelopment())
-            //{
-            //    app.UseSpaStaticFiles();
-            //}
 
             app.UseRouting();
 

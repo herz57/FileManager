@@ -39,13 +39,18 @@ namespace FM.Application.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser([FromBody]CreateUserDto userDto)
         {
-            var mappedUser = _mapper.Map<User>(userDto);
+            if (await _userManager.FindByEmailAsync(userDto.Email) != null)
+            {
+                return BadRequest("User with the same email has already exists");
+            }
 
+            var mappedUser = _mapper.Map<User>(userDto);
+            
             var result = await _userManager.CreateAsync(mappedUser, userDto.Password);
 
             if (!result.Succeeded)
             {
-                return BadRequest(result);
+                return BadRequest(result.Errors.FirstOrDefault().Description);
             }
 
             var user = await _userManager.FindByNameAsync(userDto.UserName);
@@ -56,14 +61,14 @@ namespace FM.Application.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{password}")]
-        public async Task<IActionResult> DeleteUser([FromRoute]string password)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser([FromBody]DeleteAccountDto deleteAccountDto)
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             
-            if (!await _userManager.CheckPasswordAsync(user, password))
+            if (!await _userManager.CheckPasswordAsync(user, deleteAccountDto.Password))
             {
-                return BadRequest();
+                return BadRequest("Wrong password");
             }
 
             await _userManager.DeleteAsync(user);
@@ -90,7 +95,7 @@ namespace FM.Application.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(result);
+                return BadRequest(result.Errors.FirstOrDefault().Description);
             }
 
             return Ok("Password has been changed");
@@ -131,14 +136,14 @@ namespace FM.Application.Controllers
 
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("User not found");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Code, resetPasswordDto.Password);
 
             if (!result.Succeeded)
             {
-                return BadRequest();
+                return BadRequest(result.Errors.FirstOrDefault().Description);
             }
 
             return Ok("Password has been reseted");

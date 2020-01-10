@@ -12,7 +12,7 @@
                     <div style="margin-top:20px;" class="col-xs-6 col-sm-6 col-md-6 login-box">
                         <div class="form-group">
                             <div class="input-group">
-                                <input class="form-control" name="pass" #pass="ngModel" [(ngModel)]="passwordUserData.value" type="password" placeholder="Password" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$#!%*?&])[A-Za-z\d$@$#!%*?&].{7,20}">
+                                <input class="form-control" name="pass" #pass="ngModel" [(ngModel)]="passwordUserData.password" type="password" placeholder="Password" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$#!%*?&])[A-Za-z\d$@$#!%*?&].{7,20}">
                                 <div [hidden]="pass.valid || pass.untouched" class="alert-message">
                                     Incorrect password format
                                 </div>

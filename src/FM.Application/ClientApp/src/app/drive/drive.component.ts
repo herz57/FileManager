@@ -20,7 +20,6 @@ export class DriveComponent implements OnInit {
   @ViewChild('readOnlyTemplate', {static: false}) readOnlyTemplate: TemplateRef<any>;
   @ViewChild('editTemplate', {static: false}) editTemplate: TemplateRef<any>;
 
-  filesUrl = "http://cc.filecoreapp.com:80/api/file/files";
   response: any
   editedFile: FileModel
   files: Array<FileModel>
