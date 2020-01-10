@@ -73,8 +73,8 @@ namespace FM.FileService
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = _oauthOptions.AuthServer;
-                options.Audience = _oauthOptions.ApiName;
+                options.Authority = "http://192.168.1.180:5001";
+                options.Audience = "file";
                 options.RequireHttpsMetadata = false;
             });
 
@@ -90,7 +90,6 @@ namespace FM.FileService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors("AllowOrigin");
 
             if (env.IsDevelopment())
             {
@@ -102,6 +101,8 @@ namespace FM.FileService
             }
 
             app.UseRouting();
+
+            app.UseCors("AllowOrigin");
 
             app.UseAuthentication();
             app.UseAuthorization();

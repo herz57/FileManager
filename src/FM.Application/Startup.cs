@@ -98,7 +98,7 @@ namespace FM.Application
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = "http://cc.filedriveservice.com:88";
+                options.Authority = "http://192.168.1.180:5001";
                 options.Audience = "identity";
                 options.RequireHttpsMetadata = false;
 
@@ -121,7 +121,6 @@ namespace FM.Application
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors("AllowOrigin");
 
             if (env.IsDevelopment())
             {
@@ -136,6 +135,8 @@ namespace FM.Application
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors("AllowOrigin");
 
             app.UseAuthentication();
             app.UseIdentityServer();

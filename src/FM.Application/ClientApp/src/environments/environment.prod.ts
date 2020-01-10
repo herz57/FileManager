@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  usersEndpoint: 'http://cc.filedriveservice.com:88/api/users/',
-  fileEndpoint: 'http://cc.filedriveservice.com:80/api/file/',
-  fileHistoryEndpoint: 'http://cc.filedriveservice.com:80/api/filehistory/',
-  tokenEndpoint: 'http://cc.filedriveservice.com:88/connect/token'
+  usersEndpoint: 'http://192.168.1.180:5001/api/users/',
+  fileEndpoint: 'http://192.168.1.180:5000/api/file/',
+  fileHistoryEndpoint: 'http://192.168.1.180:5000/api/filehistory/',
+  tokenEndpoint: 'http://192.168.1.180:5001/connect/token'
 };

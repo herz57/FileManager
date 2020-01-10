@@ -3,7 +3,6 @@
     <table class="table" >
         <thead>
         <tr class="top-headers-row">
-            <th><label for="Id">Id</label></th>
             <th><label for="Name">Name</label></th>
             <th><label>Size (KB)</label></th>
             <th><label>Uploaded time</label></th>
@@ -13,7 +12,6 @@
         </thead>
         <tbody>
         <tr class="filters_row" (change)="applyFilters()">
-            <td><input class="form-control" id="Id" [(ngModel)]="filtersModel.filters.id" type="text" placeholder="Id"></td>
             <td><input class="form-control" id="Name" [(ngModel)]="filtersModel.filters.name" type="text" placeholder="Name"></td>
             <td><input class="form-control min" id="MinSize" [(ngModel)]="filters.size[0]" type="number" placeholder="Min">
                 <input class="form-control" id="MaxSize" [(ngModel)]="filters.size[1]" type="number" placeholder="Max">
